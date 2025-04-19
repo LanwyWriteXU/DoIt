@@ -16,70 +16,70 @@ Blockly.Themes.DayTheme = Blockly.Theme.defineTheme('dayTheme', {
     },
     'blockStyles': {
       'list_blocks': {
-        'colourPrimary': '#4a6baf',
-        'colourSecondary': '#5d7bc4',
-        'colourTertiary': '#3a56a0'
+        'colourPrimary': '#FF661A',
+        'colourSecondary': '#E64D00',
+        'colourTertiary': '#E64D00'
       },
       'logic_blocks': {
-        'colourPrimary': '#8f2440',
-        'colourSecondary': '#b32d56',
-        'colourTertiary': '#7a1f3a'
+        'colourPrimary': '#FFAB19',
+        'colourSecondary': '#CF8B17',
+        'colourTertiary': '#CF8B17'
       },
       'loop_blocks': {
-        'colourPrimary': '#158c45',
-        'colourSecondary': '#1daa5b',
-        'colourTertiary': '#0e7535'
+        'colourPrimary': '#FFAB19',
+        'colourSecondary': '#CF8B17',
+        'colourTertiary': '#CF8B17'
       },
       'math_blocks': {
-        'colourPrimary': '#a05c17',
-        'colourSecondary': '#c97a2c',
-        'colourTertiary': '#8a4e15'
+        'colourPrimary': '#59C059',
+        'colourSecondary': '#389438',
+        'colourTertiary': '#389438'
       },
       'procedure_blocks': {
-        'colourPrimary': '#6940a5',
-        'colourSecondary': '#855ac6',
-        'colourTertiary': '#5d3a8f'
+        'colourPrimary': '#FF6680',
+        'colourSecondary': '#FF3355',
+        'colourTertiary': '#FF4D6A'
       },
       'text_blocks': {
-        'colourPrimary': '#d39f00',
-        'colourSecondary': '#ffc107',
-        'colourTertiary': '#b38a00'
+        'colourPrimary': '#4C97FF',
+        'colourSecondary': '#3373CC',
+        'colourTertiary': '#4280D7'
       },
       'variable_blocks': {
-        'colourPrimary': '#a54b17',
-        'colourSecondary': '#c85f22',
-        'colourTertiary': '#8c3f12'
+        'colourPrimary': '#FF8C1A',
+        'colourSecondary': '#DB6E00',
+        'colourTertiary': '#DB6E00'
       },
       'variable_dynamic_blocks': {
-        'colourPrimary': '#a54b17',
-        'colourSecondary': '#c85f22',
-        'colourTertiary': '#8c3f12'
+        'colourPrimary': '#FF8C1A',
+        'colourSecondary': '#DB6E00',
+        'colourTertiary': '#DB6E00'
       }
     },
     'categoryStyles': {
       'list_category': {
-        'colour': '#4a6baf'
+        'colour': '#F66317'
       },
       'logic_category': {
-        'colour': '#8f2440'
+        'colour': '#FEA719'
       },
       'loop_category': {
-        'colour': '#158c45'
+        'colour': '#FEA719'
       },
       'math_category': {
-        'colour': '#a05c17'
+        'colour': '#59C059'
       },
       'procedure_category': {
-        'colour': '#6940a5'
+        'colour': '#FF6680'
       },
       'text_category': {
-        'colour': '#d39f00'
+        'colour': '#4C97FF'
       },
       'variable_category': {
-        'colour': '#a54b17'
+        'colour': '#FF8C1A'
       },
       'variable_dynamic_category': {
-        'colour': '#a54b17'
+        'colour': '#FF8C1A'
       }
     }
   });

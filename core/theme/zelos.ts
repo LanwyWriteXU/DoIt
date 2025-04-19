@@ -25,7 +25,7 @@ const defaultBlockStyles = {
     'colourTertiary': '#3373CC',
   },
   'loop_blocks': {
-    'colourPrimary': '#0fBD8C',
+    'colourPrimary': '#ffffff',
     'colourSecondary': '#0DA57A',
     'colourTertiary': '#0B8E69',
   },

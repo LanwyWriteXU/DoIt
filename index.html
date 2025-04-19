@@ -12,6 +12,7 @@
   <script src="zh-hans.js"></script>
 </head>
 <body>
+  <!--工具栏-->
   <div class="toolbar">
     <div class="toolbar-title">
       <img src="asset/DoIt!.svg" alt="Logo" class="logo">
@@ -54,6 +55,30 @@
       </div>
     </div>
   </div>
+
+  <!--Tab栏-->
+  <div class="tab-bar">
+    <!-- 左侧标签部分 -->
+    <div class="tab-buttons">
+      <button class="tab-button active">常用</button>
+      <button class="tab-button">高级</button>
+      <button class="tab-button">工具</button>
+    </div>
+
+    <!-- 右侧固定部分 -->
+    <div class="tab-right-panel">
+      <div class="left-buttons">
+        <button class="action-btn run-btn">运行</button>
+        <button class="action-btn stop-btn">停止</button>
+      </div>
+      <button class="collapse-btn">
+        <span>折叠</span>
+        <svg class="collapse-icon" viewBox="0 0 24 24" width="16" height="16">
+          <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  </div>
   
   <div class="container">
     <div class="editor" id="blocklyDiv"></div>
@@ -74,25 +99,22 @@
   </div>
 
   <xml id="toolbox" style="display: none">
-    <category name="逻辑" colour="210">
-      <block type="controls_if"></block>
-      <block type="controls_ifelse"></block>
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-      <block type="logic_negate"></block>
-      <block type="logic_boolean"></block>
-      <block type="logic_null"></block>
-      <block type="logic_ternary"></block>
-    </category>
-    <category name="循环" colour="120">
+    <category name="控制" categorystyle="logic_category">
       <block type="controls_repeat_ext"></block>
       <block type="controls_repeat"></block>
       <block type="controls_whileUntil"></block>
       <block type="controls_for"></block>
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_ternary"></block>
+      <block type="controls_if"></block>
+      <block type="controls_ifelse"></block>
     </category>
-    <category name="数学" colour="230">
+    <category name="运算" categorystyle="math_category">
       <block type="math_number"></block>
       <block type="math_arithmetic"></block>
       <block type="math_single"></block>
@@ -106,7 +128,7 @@
       <block type="math_on_list"></block>
       <block type="math_constrain"></block>
     </category>
-    <category name="文本" colour="160">
+    <category name="文本" categorystyle="text_category">
       <block type="text"></block>
       <block type="text_print"></block>
       <block type="text_join"></block>
@@ -119,21 +141,8 @@
       <block type="python_string_lower"></block>
       <block type="python_string_split"></block>
     </category>
-    <category name="字典" colour="300">
-      <block type="python_dict_create"></block>
-      <block type="python_dict_get"></block>
-      <block type="python_dict_set"></block>
-      <block type="python_dict_keys"></block>
-    </category>
-    <category name="文件操作" colour="290">
-      <block type="python_file_open"></block>
-      <block type="python_file_read"></block>
-      <block type="python_file_write"></block>
-      <block type="python_file_close"></block>
-    </category>
-    <category name="函数" colour="290" custom="PROCEDURE"></category>
-    <category name="变量" colour="330" custom="VARIABLE"></category>
-    <category name="列表" colour="260">
+    <category name="变量"  custom="VARIABLE" categorystyle="variable_category"></category>
+    <category name="列表" categorystyle="list_category">
       <block type="lists_create_empty"></block>
       <block type="lists_repeat"></block>
       <block type="lists_reverse"></block>
@@ -144,6 +153,19 @@
       <block type="python_list_get"></block>
       <block type="python_list_set"></block>
       <block type="python_list_sort"></block>
+    </category>
+    <category name="自制积木"  custom="PROCEDURE" categorystyle="procedure_category"></category>
+    <category name="字典" categorystyle="math_category">
+      <block type="python_dict_create"></block>
+      <block type="python_dict_get"></block>
+      <block type="python_dict_set"></block>
+      <block type="python_dict_keys"></block>
+    </category>
+    <category name="文件操作" categorystyle="math_category">
+      <block type="python_file_open"></block>
+      <block type="python_file_read"></block>
+      <block type="python_file_write"></block>
+      <block type="python_file_close"></block>
     </category>
   </xml>
 

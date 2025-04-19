@@ -34,6 +34,7 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   // </block>
   {
     'type': 'lists_create_empty',
+    'colour': 30,
     'message0': '%{BKY_LISTS_CREATE_EMPTY_TITLE}',
     'output': 'Array',
     'style': 'list_blocks',

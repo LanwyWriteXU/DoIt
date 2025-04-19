@@ -73,7 +73,7 @@ body {
 }
 
 .toolbar-title .logo {
-  width: 86px;
+  width: 68px;
   height: 36px;
   vertical-align: middle;
 }
@@ -88,7 +88,6 @@ body {
   position: relative;
   display: flex;
   align-items: stretch;
-  /* margin-right: 15px; */
 }
 
 .dropdown-btn {
@@ -155,9 +154,220 @@ body {
   box-sizing: border-box; 
 }
 
+/* Tab栏样式 */
+.tab-bar {
+  background-color: var(--dropdown-bg);
+  border-bottom: 1px solid var(--border-color);
+  height: 36px;
+  display: flex;
+  align-items: stretch;
+  z-index: 90;
+  position: relative;
+}
+
+/* 左侧标签部分 */
+.tab-buttons {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0; /* 允许缩小 */
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  padding: 0 16px;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  background-color: var(--dropdown-hover);
+}
+
+.tab-button.active {
+  background-color: var(--highlight-color);
+  font-weight: bold;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--toolbar-bg);
+}
+
+/* 右侧固定部分 */
+.tab-right-panel {
+  width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-left: 1px solid var(--border-color);
+  background-color: var(--dropdown-bg);
+}
+
+.left-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  background-color: var(--toolbar-bg);
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+
+.action-btn:hover {
+  opacity: 0.9;
+}
+
+.run-btn {
+  background-color: #4CAF50;
+}
+
+.stop-btn {
+  background-color: #F44336;
+}
+
+.collapse-btn {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.collapse-btn:hover {
+  background-color: var(--dropdown-hover);
+}
+
+.collapse-icon {
+  transition: transform 0.2s;
+}
+
+.collapse-btn.collapsed .collapse-icon {
+  transform: rotate(180deg);
+}
+
+.night-mode .tab-bar {
+  background-color: var(--dropdown-bg);
+  border-bottom-color: var(--border-color);
+}
+
+.night-mode .tab-right-panel {
+  background-color: var(--dropdown-bg);
+  border-left-color: var(--border-color);
+}
+
+.night-mode .tab-button {
+  color: var(--text-color);
+}
+
+.night-mode .tab-button:hover {
+  background-color: var(--dropdown-hover);
+}
+
+.night-mode .tab-button.active {
+  background-color: var(--highlight-color);
+}
+
+.night-mode .collapse-btn {
+  color: var(--text-color);
+}
+
+.night-mode .collapse-btn:hover {
+  background-color: var(--dropdown-hover);
+}
+
+/*暗黑模式Tab栏颜色调整优化*/
+.night-mode .tab-bar {
+  background-color: #1e1e1e;
+  border-bottom-color: #444;
+}
+
+.night-mode .tab-right-panel {
+  background-color: #1e1e1e;
+  border-left-color: #444;
+}
+
+.night-mode .tab-button {
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease;
+}
+
+.night-mode .tab-button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.night-mode .tab-button.active {
+  background-color: rgba(66, 165, 245, 0.15);
+  color: #42a5f5;
+  font-weight: bold;
+}
+
+.night-mode .tab-button.active::after {
+  background-color: #42a5f5;
+  height: 3px;
+  bottom: -1px;
+  box-shadow: 0 0 8px rgba(66, 165, 245, 0.5);
+}
+
+/* 右侧按钮优化 */
+.night-mode .action-btn {
+  opacity: 0.9;
+}
+
+.night-mode .run-btn {
+  background-color: #2e7d32;
+}
+
+.night-mode .stop-btn {
+  background-color: #c62828;
+}
+
+.night-mode .collapse-btn {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.night-mode .collapse-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 调整主容器高度 */
+.container {
+  height: calc(100vh - 84px); /* 减去工具栏和Tab栏的高度 */
+}
+
+/*右侧面板区*/
 .editor {
   flex: 1;
-  height: calc(100vh - 48px); 
+  height: calc(100vh - 84px); 
   min-width: 300px;
   position: relative;
   transition: margin-right 0.3s ease;
@@ -170,7 +380,6 @@ body {
   display: flex;
   background-color: var(--output-bg);
   border-left: 1px solid var(--border-color);
-  /* transition: width 0.3s ease; */
 }
 
 .resize-handle {
@@ -180,7 +389,6 @@ body {
   left: -4px;
   cursor: col-resize;
   z-index: 10;
-  /* background-color: var(--border-color);  添加可见手柄 */
 }
 
 .output-content {
@@ -188,7 +396,6 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  /* margin-left: 64px;  为按钮留出空间 */
 }
 
 .output {
@@ -266,6 +473,7 @@ body {
   white-space: pre-wrap;
 }
 
+/*about按键*/
 .about-dropdown {
   display: flex;
   margin-left: auto;
@@ -489,6 +697,11 @@ body {
 .night-mode .dropdown-content button,
 .night-mode .about-dropdown-content button {
   border-bottom-color: rgba(255,255,255,0.05);
+}
+
+/*视图重置按钮位置重设*/
+.blocklyZoomReset {
+  transform: translate(0, 9px) scale(1);
 }
 
 /* 响应式设计 */

@@ -237,6 +237,41 @@ function setupEventListeners() {
     document.getElementById('copy-code-btn').addEventListener('click', copyCode);
     document.getElementById('theme-btn').addEventListener('click', toggleTheme);
     
+    //Tab功能
+    document.querySelectorAll('.tab-buttons .tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+          // 移除所有active类
+          document.querySelectorAll('.tab-buttons .tab-button').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          
+          // 添加active类到当前按钮
+          button.classList.add('active');
+        });
+    });
+      
+    // 折叠按钮功能
+    const collapseBtn = document.querySelector('.collapse-btn');
+    if (collapseBtn) {
+        collapseBtn.addEventListener('click', () => {
+        const outputContainer = document.getElementById('outputContainer');
+        const isCollapsed = outputContainer.style.display === 'none';
+        
+        if (isCollapsed) {
+            outputContainer.style.display = '';
+            collapseBtn.classList.remove('collapsed');
+            document.querySelector('.collapse-btn span').textContent = '折叠';
+        } else {
+            outputContainer.style.display = 'none';
+            collapseBtn.classList.add('collapsed');
+            document.querySelector('.collapse-btn span').textContent = '展开';
+        }
+        
+        // 调整工作区大小
+        setTimeout(() => Blockly.svgResize(workspace), 100);
+        });
+    }
+
     // 关于菜单
     document.getElementById('about-software-btn').addEventListener('click', showAboutSoftware);
     document.getElementById('about-developer-btn').addEventListener('click', showAboutDeveloper);
