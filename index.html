@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DoIt! - 放手去做！</title>
+  <link rel="icon" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="blockly.min.js"></script>
+  <script src="blocks.js"></script>
+  <script src="python_compressed.js"></script>
+  <script src="zh-hans.js"></script>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar-title">
+      <img src="asset/DoIt!.svg" alt="Logo" class="logo">
+    </div>
+    
+    <div class="dropdown">
+      <button class="dropdown-btn" id="file-btn">
+        <img src="asset/file-icon.svg" alt="File" class="dropdown-icon">
+        文件
+      </button>
+      <div class="dropdown-content">
+        <button id="save-btn">保存</button>
+        <button id="new-btn">新建</button>
+        <button id="export-xml-btn">导出XML</button>
+        <button id="import-xml-btn">导入XML</button>
+      </div>
+    </div>
+    
+    <div class="dropdown">
+      <button class="dropdown-btn" id="settings-btn">
+        <img src="asset/settings-icon.svg" alt="Settings" class="dropdown-icon">
+        设置
+      </button>
+      <div class="dropdown-content">
+        <button id="theme-btn">夜间模式</button>
+      </div>
+    </div>
+
+    <div class="project-name-container">
+      <input type="text" id="project-name" value="New Project" class="project-name-input">
+    </div>
+
+    <div class="about-dropdown">
+      <button class="about-btn">
+        <img src="asset/about-icon.svg" alt="About" width="24" height="24">
+      </button>
+      <div class="about-dropdown-content">
+        <button id="about-software-btn">关于软件</button>
+        <button id="about-developer-btn">关于开发者</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="editor" id="blocklyDiv"></div>
+    <div class="output-container" id="outputContainer">
+      <div class="output-content">
+        <div class="output">
+          <div class="output-header">
+            <h4>生成的 Python 代码</h4>
+            <div>
+              <button id="copy-code-btn">复制代码</button>
+            </div>
+          </div>
+          <div id="pythonCode" class="python-code"></div>
+        </div>
+        <div class="console" id="console"></div>
+      </div>
+    </div>
+  </div>
+
+  <xml id="toolbox" style="display: none">
+    <category name="逻辑" colour="210">
+      <block type="controls_if"></block>
+      <block type="controls_ifelse"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="循环" colour="120">
+      <block type="controls_repeat_ext"></block>
+      <block type="controls_repeat"></block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for"></block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="数学" colour="230">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+      <block type="math_trig"></block>
+      <block type="math_round"></block>
+      <block type="math_constant"></block>
+      <block type="math_random_int"></block>
+      <block type="math_random_float"></block>
+      <block type="math_number_property"></block>
+      <block type="math_modulo"></block>
+      <block type="math_on_list"></block>
+      <block type="math_constrain"></block>
+    </category>
+    <category name="文本" colour="160">
+      <block type="text"></block>
+      <block type="text_print"></block>
+      <block type="text_join"></block>
+      <block type="text_append"></block>
+      <block type="text_length"></block>
+      <block type="text_isEmpty"></block>
+      <block type="text_indexOf"></block>
+      <block type="text_charAt"></block>
+      <block type="python_string_upper"></block>
+      <block type="python_string_lower"></block>
+      <block type="python_string_split"></block>
+    </category>
+    <category name="字典" colour="300">
+      <block type="python_dict_create"></block>
+      <block type="python_dict_get"></block>
+      <block type="python_dict_set"></block>
+      <block type="python_dict_keys"></block>
+    </category>
+    <category name="文件操作" colour="290">
+      <block type="python_file_open"></block>
+      <block type="python_file_read"></block>
+      <block type="python_file_write"></block>
+      <block type="python_file_close"></block>
+    </category>
+    <category name="函数" colour="290" custom="PROCEDURE"></category>
+    <category name="变量" colour="330" custom="VARIABLE"></category>
+    <category name="列表" colour="260">
+      <block type="lists_create_empty"></block>
+      <block type="lists_repeat"></block>
+      <block type="lists_reverse"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_length"></block>
+      <block type="python_list_create"></block>
+      <block type="python_list_append"></block>
+      <block type="python_list_get"></block>
+      <block type="python_list_set"></block>
+      <block type="python_list_sort"></block>
+    </category>
+  </xml>
+
+  <script src="blocks/python_list.js"></script>
+  <script src="blocks/python_dict.js"></script>
+  <script src="blocks/python_io.js"></script>
+  <script src="blocks/python_string.js"></script>
+
+  <script src="theme/day_theme.js"></script>
+  <script src="theme/night_theme.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
