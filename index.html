@@ -9,6 +9,8 @@
   <script src="blockly.min.js"></script>
   <script src="blocks.js"></script>
   <script src="python_compressed.js"></script>
+  
+  <!--汉化-->
   <script src="zh-hans.js"></script>
 </head>
 <body>
@@ -141,7 +143,11 @@
       <block type="python_string_lower"></block>
       <block type="python_string_split"></block>
     </category>
-    <category name="变量"  custom="VARIABLE" categorystyle="variable_category"></category>
+    <category name="变量" categorystyle="variable_category">
+      <button text="创建变量" callbackKey="CUSTOM_CREATE_VARIABLE"></button>
+      <block type="variables_set_dynamic"></block>
+      <block type="variables_get_dynamic"></block>
+    </category> 
     <category name="列表" categorystyle="list_category">
       <block type="lists_create_empty"></block>
       <block type="lists_repeat"></block>
@@ -169,14 +175,20 @@
     </category>
   </xml>
 
+  <!--函数块定义代码-->
   <script src="blocks/python_list.js"></script>
   <script src="blocks/python_dict.js"></script>
   <script src="blocks/python_io.js"></script>
   <script src="blocks/python_string.js"></script>
 
+  <!--亮色和暗色主题-->
   <script src="theme/day_theme.js"></script>
   <script src="theme/night_theme.js"></script>
 
+  <!--一些分出来的代码-->
+  <script src="code/create_var.js"></script>
+  
+  <!--主函数-->
   <script src="script.js"></script>
 </body>
 </html>

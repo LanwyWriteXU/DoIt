@@ -14,6 +14,7 @@ const appState = {
 
 // 初始化 Blockly 工作区
 function initWorkspace() {
+    
     workspace = Blockly.inject('blocklyDiv', {
         toolbox: document.getElementById('toolbox'),
         media: './media',
@@ -37,10 +38,18 @@ function initWorkspace() {
             wheel: true
         },
     });
+    
+    // 初始化自定义变量管理器
+    CustomVariableManager.init(workspace);
+    
+    // 覆盖默认的变量类别flyout生成器
+    Blockly.Variables.flyoutCategory = function(workspace) {
+        return CustomVariableCreator.getFlyoutContents(workspace);
+    };
 
     registerPythonGenerators();
     workspace.addChangeListener(updatePythonCode);
-    
+
     // 确保工作区初始大小正确
     setTimeout(() => Blockly.svgResize(workspace), 100);
 }
