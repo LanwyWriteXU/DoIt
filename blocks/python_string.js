@@ -1,52 +1,79 @@
+//一个"print"的范例
+
+// Blockly.Blocks['printblock'] = {
+//   init: function() {
+//     this.appendValueInput("NAME")
+//         .setCheck(null)
+//         .appendField("print");
+//     this.setPreviousStatement(true, null);
+//     this.setNextStatement(true, null);
+//     this.setColour(230);
+//  this.setTooltip("");
+//  this.setHelpUrl("");
+//   }
+// };
+// python.pythonGenerator.forBlock['printblock'] = function(block, generator) {
+//   var value_name = generator.valueToCode(block, 'NAME', python.Order.ATOMIC);
+//   // TODO: Assemble python into code variable.
+//   var code = 'print(' + value_name + ')\n';
+//   return code;
+// };
+
 // 字符串操作扩展
   Blockly.Blocks['python_string_upper'] = {
     init: function() {
-      this.appendValueInput('STRING')
-        .setCheck('String')
-        .appendField('转换为大写');
-      this.setOutput(true, 'String');
-      this.setColour(160);
-      this.setTooltip('将字符串转换为大写');
+      this.setStyle('text_block');
+      this.appendValueInput("NAME")
+          .setCheck("String")
+          .appendField("转换为大写");
+      this.setOutput(true, "String");
+  this.setTooltip("将字符串转换为大写");
+  this.setHelpUrl("");
     }
   };
-  
-  Blockly.Python['python_string_upper'] = function(block) {
-    const str = Blockly.Python.valueToCode(block, 'STRING', Blockly.Python.ORDER_NONE) || '""';
-    return [`${str}.upper()`, Blockly.Python.ORDER_MEMBER];
+
+  python.pythonGenerator.forBlock['python_string_upper'] = function(block, generator) {
+    var value_name = generator.valueToCode(block, 'NAME', python.Order.ATOMIC);
+    var code = value_name + '.upper()';
+    return [code, 1];
   };
   
   Blockly.Blocks['python_string_lower'] = {
     init: function() {
-      this.appendValueInput('STRING')
-        .setCheck('String')
-        .appendField('转换为小写');
-      this.setOutput(true, 'String');
-      this.setColour(160);
-      this.setTooltip('将字符串转换为小写');
+      this.setStyle('text_block');
+      this.appendValueInput("NAME")
+          .setCheck("String")
+          .appendField("转换为小写");
+      this.setOutput(true, "String");
+   this.setTooltip("将字符串转换为小写");
+   this.setHelpUrl("");
     }
   };
   
-  Blockly.Python['python_string_lower'] = function(block) {
-    const str = Blockly.Python.valueToCode(block, 'STRING', Blockly.Python.ORDER_NONE) || '""';
-    return [`${str}.lower()`, Blockly.Python.ORDER_MEMBER];
+  python.pythonGenerator.forBlock['python_string_lower'] = function(block, generator) {
+    var value_name = generator.valueToCode(block, 'NAME', python.Order.ATOMIC);
+    var code = value_name + '.lower()';
+    return [code, 1];
   };
   
   Blockly.Blocks['python_string_split'] = {
     init: function() {
-      this.appendValueInput('STRING')
-        .setCheck('String')
-        .appendField('分割字符串');
-      this.appendValueInput('DELIMITER')
-        .setCheck('String')
-        .appendField('分隔符');
-      this.setOutput(true, 'Array');
-      this.setColour(160);
-      this.setTooltip('使用分隔符分割字符串');
+      this.setStyle('text_block');
+      this.appendValueInput("string")
+          .setCheck("String")
+          .appendField("切割字符串");
+      this.appendValueInput("del")
+          .setCheck("String")
+          .appendField("分隔符");
+      this.setOutput(true, "String");
+   this.setTooltip("使用分隔符分割字符串");
+   this.setHelpUrl("");
     }
   };
-  
-  Blockly.Python['python_string_split'] = function(block) {
-    const str = Blockly.Python.valueToCode(block, 'STRING', Blockly.Python.ORDER_NONE) || '""';
-    const delimiter = Blockly.Python.valueToCode(block, 'DELIMITER', Blockly.Python.ORDER_NONE) || '" "';
-    return [`${str}.split(${delimiter})`, Blockly.Python.ORDER_MEMBER];
+
+  python.pythonGenerator.forBlock['python_string_split'] = function(block, generator) {
+    var value_string = generator.valueToCode(block, 'string', python.Order.ATOMIC);
+    var value_del = generator.valueToCode(block, 'del', python.Order.ATOMIC);
+    var code = value_string + '.split(' + value_del +')';
+    return [code, 1];
   };

@@ -150,36 +150,44 @@
     </category> 
     <category name="列表" categorystyle="list_category">
       <block type="lists_create_empty"></block>
+      <block type="python_list_create"></block>
+      <block type="python_list_append"></block>
+      <block type="python_list_join"></block>
       <block type="lists_repeat"></block>
       <block type="lists_reverse"></block>
       <block type="lists_isEmpty"></block>
       <block type="lists_length"></block>
-      <block type="python_list_create"></block>
-      <block type="python_list_append"></block>
       <block type="python_list_get"></block>
       <block type="python_list_set"></block>
       <block type="python_list_sort"></block>
     </category>
     <category name="自制积木"  custom="PROCEDURE" categorystyle="procedure_category"></category>
-    <category name="字典" categorystyle="math_category">
-      <block type="python_dict_create"></block>
-      <block type="python_dict_get"></block>
-      <block type="python_dict_set"></block>
-      <block type="python_dict_keys"></block>
+    <category name="Python" colour="250">
+      <block type="import"></block>
+      <block type="code"></block>
+      <block type="get"></block>
     </category>
-    <category name="文件操作" categorystyle="math_category">
+    <category name="文件操作" colour="290">
       <block type="python_file_open"></block>
       <block type="python_file_read"></block>
       <block type="python_file_write"></block>
       <block type="python_file_close"></block>
     </category>
+    <category name="PyGame" colour="230">
+      <block type="pygame_init"></block>
+      <block type="pygame_create_window"></block>
+      <block type="pygame_main_loop"></block>
+      <block type="pygame_draw_rect"></block>
+      <block type="pygame_event_quit"></block>
+    </category>
   </xml>
 
   <!--函数块定义代码-->
   <script src="blocks/python_list.js"></script>
-  <script src="blocks/python_dict.js"></script>
   <script src="blocks/python_io.js"></script>
   <script src="blocks/python_string.js"></script>
+  <script src="blocks/python_pygame.js"></script>
+  <script src="blocks/python_custom.js"></script>
 
   <!--亮色和暗色主题-->
   <script src="theme/day_theme.js"></script>
