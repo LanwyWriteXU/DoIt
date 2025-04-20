@@ -22,7 +22,7 @@
 // 字符串操作扩展
   Blockly.Blocks['python_string_upper'] = {
     init: function() {
-      this.setStyle('text_block');
+      this.setStyle('text_blocks');
       this.appendValueInput("NAME")
           .setCheck("String")
           .appendField("转换为大写");
@@ -40,7 +40,7 @@
   
   Blockly.Blocks['python_string_lower'] = {
     init: function() {
-      this.setStyle('text_block');
+      this.setStyle('text_blocks');
       this.appendValueInput("NAME")
           .setCheck("String")
           .appendField("转换为小写");
@@ -58,7 +58,7 @@
   
   Blockly.Blocks['python_string_split'] = {
     init: function() {
-      this.setStyle('text_block');
+      this.setStyle('text_blocks');
       this.appendValueInput("string")
           .setCheck("String")
           .appendField("切割字符串");

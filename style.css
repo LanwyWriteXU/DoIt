@@ -813,3 +813,156 @@ body {
   --dialog-input-bg: #252526;
   --dialog-button-bg: #3a5f8a;
 }
+
+/* Scratch风格的Toolbox样式 */
+.blocklyToolboxDiv {
+  width: 80px !important;
+  background-color: var(--toolbox-bg, #f0f2f5) !important;
+  border-right: 1px solid var(--toolbox-border, #d9d9d9) !important;
+  overflow: hidden !important;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.blocklyTreeRoot {
+  padding-bottom: 60px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important; /* 去除按钮间隙 */
+}
+
+.blocklyTreeRow {
+  width: 72px !important;
+  height: 72px !important;
+  margin: 0 !important; /* 去除外边距 */
+  padding: 0 !important;
+  border-radius: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  background-color: var(--toolbox-button-bg, white) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--toolbox-border, #d9d9d9) !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.blocklyTreeRow:hover {
+  background-color: var(--toolbox-button-hover, rgba(0,0,0,0.05)) !important;
+}
+
+.blocklyTreeRowContentContainer {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.blocklyTreeLabel {
+  font-size: 12px !important;
+  margin-top: 8px !important;
+  color: var(--toolbox-text, #575e75) !important;
+  text-align: center !important;
+  padding: 0 4px !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  transition: color 0.3s;
+}
+
+.blocklyTreeIcon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  background-color: currentColor !important;
+  position: relative !important;
+  transition: background-color 0.3s;
+}
+
+.blocklyTreeIcon img {
+  width: 20px !important;
+  height: 20px !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+/* 隐藏滚动条但保留滚动功能 */
+.blocklyToolboxDiv::-webkit-scrollbar {
+  display: none !important;
+}
+
+.blocklyToolboxDiv {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* 扩展按钮样式 */
+.blocklyTreeRow[data-category="扩展"] {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 80px !important;
+  height: 60px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-top: 1px solid var(--toolbox-border, #d9d9d9) !important;
+  background-color: var(--toolbox-bg, #f0f2f5) !important;
+  z-index: 100 !important;
+}
+
+.blocklyTreeRow[data-category="扩展"] .blocklyTreeIcon {
+  color: var(--toolbox-text, #575e75) !important;
+}
+
+/* 暗黑模式适配 */
+.night-mode {
+  --toolbox-bg: #2d2d2d;
+  --toolbox-border: #444;
+  --toolbox-button-bg: #252526;
+  --toolbox-button-hover: rgba(255,255,255,0.1);
+  --toolbox-text: rgba(255,255,255,0.8);
+}
+
+/* 确保Blockly工具箱也响应暗黑模式 */
+.night-mode .blocklyToolboxDiv,
+.night-mode .blocklyTreeRow {
+  background-color: var(--toolbox-bg) !important;
+}
+
+.night-mode .blocklyTreeRow {
+  border-bottom-color: var(--toolbox-border) !important;
+}
+
+/* 更新图标样式部分 */
+.blocklyTreeIcon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  background-color: currentColor !important;
+  position: relative !important;
+  transition: background-color 0.3s;
+}
+
+.blocklyTreeIcon img {
+  width: 20px !important;
+  height: 20px !important;
+  /* 移除滤镜，因为图标已经是白色 */
+  filter: none !important;
+}
+
+/* 暗黑模式下调整图标容器颜色 */
+.night-mode .blocklyTreeIcon {
+  opacity: 0.9;
+}

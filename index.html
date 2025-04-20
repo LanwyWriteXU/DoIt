@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="light-mode">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,7 +101,7 @@
   </div>
 
   <xml id="toolbox" style="display: none">
-    <category name="控制" categorystyle="logic_category">
+    <category name="控制" categorystyle="logic_category" data-category="控制">
       <block type="controls_repeat_ext"></block>
       <block type="controls_repeat"></block>
       <block type="controls_whileUntil"></block>
@@ -116,7 +116,7 @@
       <block type="controls_if"></block>
       <block type="controls_ifelse"></block>
     </category>
-    <category name="运算" categorystyle="math_category">
+    <category name="运算" categorystyle="math_category" data-category="运算">
       <block type="math_number"></block>
       <block type="math_arithmetic"></block>
       <block type="math_single"></block>
@@ -130,7 +130,7 @@
       <block type="math_on_list"></block>
       <block type="math_constrain"></block>
     </category>
-    <category name="文本" categorystyle="text_category">
+    <category name="文本" categorystyle="text_category" data-category="文本">
       <block type="text"></block>
       <block type="text_print"></block>
       <block type="text_join"></block>
@@ -143,12 +143,12 @@
       <block type="python_string_lower"></block>
       <block type="python_string_split"></block>
     </category>
-    <category name="变量" categorystyle="variable_category">
+    <category name="变量" categorystyle="variable_category" data-category="变量">
       <button text="创建变量" callbackKey="CUSTOM_CREATE_VARIABLE"></button>
       <block type="variables_set_dynamic"></block>
       <block type="variables_get_dynamic"></block>
     </category> 
-    <category name="列表" categorystyle="list_category">
+    <category name="列表" categorystyle="list_category" data-category="列表">
       <block type="lists_create_empty"></block>
       <block type="python_list_create"></block>
       <block type="python_list_append"></block>
@@ -161,25 +161,26 @@
       <block type="python_list_set"></block>
       <block type="python_list_sort"></block>
     </category>
-    <category name="自制积木"  custom="PROCEDURE" categorystyle="procedure_category"></category>
-    <category name="Python" colour="250">
+    <category name="自制积木"  custom="PROCEDURE" categorystyle="procedure_category" data-category="自制积木"></category>
+    <category name="Python" colour="250" data-category="Python">
       <block type="import"></block>
       <block type="code"></block>
       <block type="get"></block>
     </category>
-    <category name="文件操作" colour="290">
+    <category name="文件操作" colour="290" data-category="文件操作">
       <block type="python_file_open"></block>
       <block type="python_file_read"></block>
       <block type="python_file_write"></block>
       <block type="python_file_close"></block>
     </category>
-    <category name="PyGame" colour="230">
+    <category name="PyGame" colour="230" data-category="PyGame">
       <block type="pygame_init"></block>
       <block type="pygame_create_window"></block>
       <block type="pygame_main_loop"></block>
       <block type="pygame_draw_rect"></block>
       <block type="pygame_event_quit"></block>
     </category>
+    <category name="扩展" data-category="扩展"></category>
   </xml>
 
   <!--函数块定义代码-->

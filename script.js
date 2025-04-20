@@ -39,6 +39,81 @@ function initWorkspace() {
         },
     });
     
+    // 加载图标函数
+    function loadIcons() {
+        const categories = {
+        '控制': 'asset/control-icon.svg',
+        '运算': 'asset/math-icon.svg', 
+        '文本': 'asset/text-icon.svg',
+        '变量': 'asset/variable-icon.svg',
+        '列表': 'asset/list-icon.svg',
+        '自制积木': 'asset/procedure-icon.svg',
+        'Python': 'asset/python-icon.svg',
+        '文件操作': 'asset/file-icon.svg',
+        'PyGame': 'asset/game-icon.svg',
+        '扩展': 'asset/extension-icon.svg'
+        };
+
+        document.querySelectorAll('.blocklyTreeRow').forEach(row => {
+        const category = row.getAttribute('data-category');
+        if (category && categories[category]) {
+            const icon = row.querySelector('.blocklyTreeIcon');
+            if (icon && !icon.dataset.iconLoaded) { // 防止重复加载
+            const img = new Image();
+            img.src = categories[category];
+            img.alt = category;
+            img.style.pointerEvents = 'none'; // 防止干扰点击
+            
+            img.onload = () => {
+                icon.innerHTML = '';
+                icon.appendChild(img);
+                icon.dataset.iconLoaded = 'true';
+            };
+            
+            img.onerror = () => {
+                console.error(`图标加载失败: ${categories[category]}`);
+                // 备用方案：使用文字图标
+                icon.textContent = category.charAt(0);
+                icon.style.display = 'flex';
+                icon.style.alignItems = 'center';
+                icon.style.justifyContent = 'center';
+                icon.style.color = 'white';
+                icon.style.fontWeight = 'bold';
+                icon.style.fontSize = '16px';
+            };
+            }
+        }
+        });
+    }
+
+    // 初始加载
+    loadIcons();
+    
+    // 使用MutationObserver监听DOM变化
+    const observer = new MutationObserver((mutations) => {
+        let needsUpdate = false;
+        mutations.forEach((mutation) => {
+        if (mutation.addedNodes.length) {
+            needsUpdate = true;
+        }
+        });
+        if (needsUpdate) {
+        loadIcons();
+        }
+    });
+
+    observer.observe(document.querySelector('.blocklyToolboxDiv'), {
+        childList: true,
+        subtree: true
+    });
+
+    // 确保扩展按钮在底部
+    const extensionBtn = document.querySelector('.blocklyTreeRow[data-category="扩展"]');
+    if (extensionBtn) {
+        extensionBtn.style.position = 'fixed';
+        extensionBtn.style.bottom = '0';
+        extensionBtn.style.left = '0';
+    }
     // 初始化自定义变量管理器
     CustomVariableManager.init(workspace);
     
@@ -202,8 +277,19 @@ async function copyCode() {
 function toggleTheme() {
     appState.isNightMode = !appState.isNightMode;
     document.body.classList.toggle('night-mode', appState.isNightMode);
+    document.documentElement.classList.toggle('night-mode', appState.isNightMode); // 添加到html元素
     workspace.setTheme(appState.isNightMode ? Blockly.Themes.NightTheme : Blockly.Themes.DayTheme);
     document.getElementById('theme-btn').textContent = appState.isNightMode ? '日间模式' : '夜间模式';
+    
+    // 强制重绘工具箱
+    setTimeout(() => {
+      Blockly.svgResize(workspace);
+      document.querySelectorAll('.blocklyTreeIcon img').forEach(img => {
+        const parent = img.parentElement;
+        parent.removeChild(img);
+        parent.appendChild(img);
+      });
+    }, 100);
 }
 
 function showAboutSoftware() {
