@@ -76,7 +76,6 @@ body {
 }
 
 .toolbar-title {
-  margin-right: 15px;
   display: flex;
   align-items: center;
   padding: 0 15px;
@@ -814,112 +813,127 @@ body {
   --dialog-button-bg: #3a5f8a;
 }
 
-/* Scratch风格的Toolbox样式 */
-.blocklyToolboxDiv {
-  width: 80px !important;
-  background-color: var(--toolbox-bg, #f0f2f5) !important;
-  border-right: 1px solid var(--toolbox-border, #d9d9d9) !important;
-  overflow: hidden !important;
-  transition: background-color 0.3s, border-color 0.3s;
+/* 自定义工具箱容器 - 宽度改为64px */
+.custom-toolbox-container {
+  position: fixed;
+  left: 0;
+  top: 84px; /* 工具栏高度 */
+  bottom: 0;
+  width: 64px; /* 修改为64px */
+  display: flex;
+  flex-direction: column;
+  background-color: var(--toolbox-bg, #f0f2f5);
+  border-right: 1px solid var(--toolbox-border, #d9d9d9);
+  z-index: 999;
 }
 
-.blocklyTreeRoot {
-  padding-bottom: 60px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0 !important; /* 去除按钮间隙 */
+/* 可滚动区域 */
+.blockly-toolbox-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 48px; /* 调整为扩展按钮高度 */
+}
+
+/* 自定义滚动条（左侧，宽度2px的长方形） */
+.blockly-toolbox-scrollable::-webkit-scrollbar {
+  width: 2px; /* 改为2px宽度 */
+  height: 2px;
+}
+
+.blockly-toolbox-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.blockly-toolbox-scrollable::-webkit-scrollbar-thumb {
+  background: var(--toolbox-scrollbar, rgba(0,0,0,0.2));
+  border-radius: 0; /* 改为长方形 */
+}
+
+/* 扩展按钮容器 - 背景色改为#66ccff */
+.toolbox-extension-button {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 64px;
+  height: 64px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #66ccff; /* 修改为指定颜色 */
+  border-top: 1px solid var(--toolbox-border, #d9d9d9);
+  z-index: 1000;
+}
+
+/* 扩展按钮内部布局 */
+.extension-btn-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: white; /* 文本颜色改为白色 */
+}
+
+/* 使用图标代替圆圈 */
+.extension-icon {
+  width: 24px;
+  height: 24px;
+  background-image: url('asset/extension-icon.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 2px;
 }
 
 .blocklyTreeRow {
-  width: 72px !important;
-  height: 72px !important;
-  margin: 0 !important; /* 去除外边距 */
+  width: 100% !important;
+  height: 48px !important; 
+  margin: 0 !important;
   padding: 0 !important;
   border-radius: 0 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  position: relative !important;
   background-color: var(--toolbox-button-bg, white) !important;
-  border: none !important;
   border-bottom: 1px solid var(--toolbox-border, #d9d9d9) !important;
   box-sizing: border-box !important;
-  transition: background-color 0.3s, border-color 0.3s;
-}
-
-.blocklyTreeRow:hover {
-  background-color: var(--toolbox-button-hover, rgba(0,0,0,0.05)) !important;
-}
-
-.blocklyTreeRowContentContainer {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.blocklyTreeLabel {
-  font-size: 12px !important;
-  margin-top: 8px !important;
-  color: var(--toolbox-text, #575e75) !important;
-  text-align: center !important;
-  padding: 0 4px !important;
-  width: 100% !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  transition: color 0.3s;
-}
-
-.blocklyTreeIcon {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin: 0 !important;
-  background-color: currentColor !important;
   position: relative !important;
-  transition: background-color 0.3s;
 }
 
-.blocklyTreeIcon img {
-  width: 20px !important;
-  height: 20px !important;
-  filter: brightness(0) invert(1) !important;
+/* 调整彩色圆圈大小 */
+.blocklyTreeRow::before {
+  content: '';
+  position: relative;
+  width: 20px; 
+  height: 20px;
+  border-radius: 50%;
+  margin-bottom: 0; /* 调整间距 */
+  margin-top: 4px; /* 调整圆圈距离上边缘的距离 */
+  background-color: currentColor;
 }
 
-/* 隐藏滚动条但保留滚动功能 */
-.blocklyToolboxDiv::-webkit-scrollbar {
+/* 隐藏这狗屁玩意，我搞半天不知道为什么文本没对齐,结果是Blockly创建的你小子 */
+/* 不过我都没想到这个有自带的图标选项 */
+.blocklyTreeIcon {
   display: none !important;
 }
 
-.blocklyToolboxDiv {
-  -ms-overflow-style: none !important;
-  scrollbar-width: none !important;
-}
-
-/* 扩展按钮样式 */
-.blocklyTreeRow[data-category="扩展"] {
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 80px !important;
-  height: 60px !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  border-top: 1px solid var(--toolbox-border, #d9d9d9) !important;
-  background-color: var(--toolbox-bg, #f0f2f5) !important;
-  z-index: 100 !important;
-}
-
-.blocklyTreeRow[data-category="扩展"] .blocklyTreeIcon {
+/* 调整标签文本样式 */
+.blocklyTreeLabel {
+  font-size: 11px !important; /* 缩小字体 */
+  margin-top: 0px !important; /* 调整间距 */
   color: var(--toolbox-text, #575e75) !important;
+  text-align: center !important;
+  padding: 0px 0px !important;
+  flex-direction: column !important;
+  align-items: center !important; /* 确保子元素居中 */
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 /* 暗黑模式适配 */
@@ -928,41 +942,32 @@ body {
   --toolbox-border: #444;
   --toolbox-button-bg: #252526;
   --toolbox-button-hover: rgba(255,255,255,0.1);
+  --toolbox-scrollbar: rgba(255,255,255,0.2);
   --toolbox-text: rgba(255,255,255,0.8);
 }
 
-/* 确保Blockly工具箱也响应暗黑模式 */
-.night-mode .blocklyToolboxDiv,
-.night-mode .blocklyTreeRow {
-  background-color: var(--toolbox-bg) !important;
+/* 暗黑模式下的扩展按钮 */
+.night-mode .toolbox-extension-button {
+  background-color: #3a5f8a; /* 暗色版本的主色调 */
 }
 
-.night-mode .blocklyTreeRow {
-  border-bottom-color: var(--toolbox-border) !important;
+/* 确保Blockly不会覆盖我们的自定义样式 */
+.blocklyToolboxDiv {
+  background-color: transparent !important;
+  border: none !important;
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  overflow: visible !important;
 }
 
-/* 更新图标样式部分 */
-.blocklyTreeIcon {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin: 0 !important;
-  background-color: currentColor !important;
-  position: relative !important;
-  transition: background-color 0.3s;
-}
-
-.blocklyTreeIcon img {
-  width: 20px !important;
-  height: 20px !important;
-  /* 移除滤镜，因为图标已经是白色 */
-  filter: none !important;
-}
-
-/* 暗黑模式下调整图标容器颜色 */
-.night-mode .blocklyTreeIcon {
-  opacity: 0.9;
-}
+/* 为每个类别设置不同的颜色 */
+.blocklyTreeRow[data-category="控制"] { color: #FEA719 !important; }
+.blocklyTreeRow[data-category="运算"] { color: #59C059 !important; }
+.blocklyTreeRow[data-category="文本"] { color: #4C97FF !important; }
+.blocklyTreeRow[data-category="变量"] { color: #FF8C1A !important; }
+.blocklyTreeRow[data-category="列表"] { color: #F66317 !important; }
+.blocklyTreeRow[data-category="自制积木"] { color: #FF6680 !important; }
+.blocklyTreeRow[data-category="Python"] { color: #675BA5 !important; }
+.blocklyTreeRow[data-category="文件操作"] { color: #995BA5 !important; }
+.blocklyTreeRow[data-category="PyGame"] { color: #5B67A5 !important; }

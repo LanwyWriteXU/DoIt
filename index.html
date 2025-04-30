@@ -180,7 +180,6 @@
       <block type="pygame_draw_rect"></block>
       <block type="pygame_event_quit"></block>
     </category>
-    <category name="扩展" data-category="扩展"></category>
   </xml>
 
   <!--函数块定义代码-->
@@ -199,5 +198,20 @@
   
   <!--主函数-->
   <script src="script.js"></script>
+
+  <!-- 修改后的工具箱容器结构 -->
+  <div class="custom-toolbox-container">
+    <div class="blockly-toolbox-scrollable">
+      <!-- Blockly会自动在这里生成工具箱内容 -->
+      <div id="blocklyToolbox"></div>
+    </div>
+    <div class="toolbox-extension-button">
+      <div class="extension-btn-inner">
+        <div class="extension-icon"></div>
+        <span>扩展</span>
+      </div>
+    </div>
+  </div>
+  
 </body>
 </html>
