@@ -137,3 +137,18 @@
     var code = value_array + '.sort(reverse=' + dropdown_reserve +')\n';
     return code;
   };
+
+  Blockly.Blocks['python_list_len'] = {
+    init: function() {
+      this.setStyle('list_blocks');
+      this.appendValueInput("array")
+         .setCheck(null)
+         .appendField("获取列表长度");
+      this.setOutput(true, null);
+    }
+  }
+  python.pythonGenerator.forBlock['python_list_len'] = function(block, generator) {
+    var value_array = generator.valueToCode(block, 'array', python.Order.ATOMIC);
+    var code = 'len(' + value_array + ')';
+    return [code, 1];
+  }
