@@ -1,8 +1,126 @@
-<div class="debug-panel">
-    <h3>调试控制台</h3>
-    <div class="debug-controls">
-      <button class="debug-btn">开始调试</button>
-      <button class="debug-btn">单步执行</button>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --sidebar-bg: var(--dropdown-bg);
+            --sidebar-text: var(--text-color);
+            --sidebar-border: var(--border-color);
+            --sidebar-hover: var(--dropdown-hover);
+            --icon-filter: brightness(0);
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        body.night-mode {
+            --sidebar-bg: #2d2d2d;
+            --sidebar-text: #e0e0e0;
+            --sidebar-border: #444;
+            --sidebar-hover: #3d3d3d;
+            --icon-filter: brightness(0.8);
+        }
+        
+        .sidebar-content-body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+        }
+        
+        .sidebar-header {
+            padding: 12px;
+            border-bottom: 1px solid var(--sidebar-border);
+            background-color: var(--sidebar-bg);
+        }
+        
+        .debug-controls {
+            display: flex;
+            gap: 8px;
+            padding: 8px;
+            border-bottom: 1px solid var(--sidebar-border);
+        }
+        
+        .debug-controls button {
+            background-color: var(--dialog-button-bg);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .debug-console {
+            padding: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            background-color: var(--console-bg);
+            color: var(--console-text);
+            height: calc(100% - 40px);
+            overflow: auto;
+        }
+        
+        .debug-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            filter: var(--icon-filter);
+        }
+    </style>
+</head>
+<body class="sidebar-content-body">
+    <div class="sidebar-header">
+        <h3>调试控制台</h3>
     </div>
-    <div class="debug-output"></div>
-</div>
+    <div class="sidebar-content">
+        <div class="debug-controls">
+            <button id="start-debug">
+                <img src="asset/debug-icon.svg" class="debug-icon">开始调试
+            </button>
+            <button id="stop-debug">
+                <img src="asset/stop-icon.svg" class="debug-icon">停止
+            </button>
+        </div>
+        <div class="debug-console" id="debug-output">
+            调试器就绪
+        </div>
+    </div>
+    <script>
+        // 解析URL参数获取初始主题
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialTheme = urlParams.get('theme') || 'light';
+        document.body.classList.toggle('night-mode', initialTheme === 'dark');
+        
+        // 处理主题同步消息
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'themeSync') {
+                document.body.classList.toggle('night-mode', event.data.isNightMode);
+            }
+        });
+        
+        // 调试按钮功能
+        document.getElementById('start-debug').addEventListener('click', () => {
+            document.getElementById('debug-output').textContent += '\n开始调试会话...';
+        });
+        
+        document.getElementById('stop-debug').addEventListener('click', () => {
+            document.getElementById('debug-output').textContent += '\n调试会话已终止';
+        });
+    </script>
+</body>
+</html>

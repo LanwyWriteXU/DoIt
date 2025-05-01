@@ -10,6 +10,8 @@ const appState = {
     minWidth: 300,
     maxWidth: 800,
     projectName: "New Project",
+    sidebarExpanded: false,
+    activeSidebarTab: null,
 };
 
 // 初始化 Blockly 工作区
@@ -221,11 +223,21 @@ async function copyCode() {
 function toggleTheme() {
     appState.isNightMode = !appState.isNightMode;
     document.body.classList.toggle('night-mode', appState.isNightMode);
+    
+    // 立即更新工作区
     workspace.setTheme(appState.isNightMode ? Blockly.Themes.NightTheme : Blockly.Themes.DayTheme);
+    Blockly.svgResize(workspace);
+    
     document.getElementById('theme-btn').textContent = appState.isNightMode ? '日间模式' : '夜间模式';
     
-    // 强制重绘
-    setTimeout(() => Blockly.svgResize(workspace), 100);
+    // 同步到已加载的侧栏iframe
+    const sidebarFrame = document.getElementById('sidebar-frame');
+    if (sidebarFrame.contentWindow) {
+        sidebarFrame.contentWindow.postMessage({
+            type: 'themeSync',
+            isNightMode: appState.isNightMode
+        }, '*');
+    }
 }
 
 function showAboutSoftware() {
@@ -251,6 +263,82 @@ function setupZoomControls() {
         workspace.zoomCenter(1 / appState.zoomLevel);
         appState.zoomLevel = 1.0;
     });
+}
+
+//侧栏初始化函数
+function initSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const filesBtn = document.getElementById('files-btn');
+    const debugBtn = document.getElementById('debug-btn');
+    const extensionsBtn = document.getElementById('extensions-btn');
+    const sidebarFrame = document.getElementById('sidebar-frame');
+
+    // 切换侧栏展开/折叠 - 直接显示/隐藏，无动画
+    function toggleSidebar(expand) {
+        appState.sidebarExpanded = expand !== undefined ? expand : !appState.sidebarExpanded;
+        sidebar.classList.toggle('expanded', appState.sidebarExpanded);
+        
+        // 立即调整工作区大小
+        Blockly.svgResize(workspace);
+    }
+
+    // 加载侧栏内容
+    function loadSidebarContent(tab) {
+        if (appState.activeSidebarTab === tab) {
+            toggleSidebar(!appState.sidebarExpanded);
+            return;
+        }
+        
+        appState.activeSidebarTab = tab;
+        
+        document.querySelectorAll('.sidebar-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.getElementById(`${tab}-btn`).classList.add('active');
+        
+        const themeParam = appState.isNightMode ? '?theme=dark' : '?theme=light';
+        const sidebarFrame = document.getElementById('sidebar-frame');
+        sidebarFrame.src = `code/${tab}.html${themeParam}`;
+        
+        // 确保iframe加载完成后调整大小
+        sidebarFrame.onload = function() {
+            try{
+                // 发送主题信息
+                sidebarFrame.contentWindow.postMessage({
+                    type: 'themeSync',
+                    isNightMode: appState.isNightMode
+                }, '*');
+            } catch (e) {
+                console.error('无法与iframe通信',e);
+            }
+            
+            // 确保iframe内容高度正确
+            setTimeout(() => {
+                Blockly.svgResize(workspace);
+            }, 100);
+        };
+
+        toggleSidebar(true);
+    }
+
+    // 按钮点击事件
+    filesBtn.addEventListener('click', () => loadSidebarContent('files'));
+    debugBtn.addEventListener('click', () => loadSidebarContent('debug'));
+    extensionsBtn.addEventListener('click', () => loadSidebarContent('extensions'));
+    
+    // 初始化时发送主题状态
+    setTimeout(() => {
+        const sidebarFrame = document.getElementById('sidebar-frame');
+        if (sidebarFrame && sidebarFrame.contentWindow) {
+            sidebarFrame.contentWindow.postMessage({
+                type: 'themeChange',
+                isNightMode: appState.isNightMode
+            }, '*');
+        }
+    }, 500);
+
+    // 初始化时折叠侧栏
+    toggleSidebar(false);
 }
 
 // 初始化事件监听
@@ -281,7 +369,7 @@ function setupEventListeners() {
         });
     });
       
-    // 折叠按钮功能
+    // 代码生成面板折叠按钮功能
     const collapseBtn = document.querySelector('.collapse-btn');
     if (collapseBtn) {
         collapseBtn.addEventListener('click', () => {
@@ -303,6 +391,22 @@ function setupEventListeners() {
         });
     }
 
+    window.addEventListener('resize', () => {
+        Blockly.svgResize(workspace);
+    });
+
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'requestTheme') {
+            const iframe = document.getElementById('sidebar-frame');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({
+                    type: 'themeResponse',
+                    isNightMode: appState.isNightMode
+                }, '*');
+            }
+        }
+    });
+
     // 关于菜单
     document.getElementById('about-software-btn').addEventListener('click', showAboutSoftware);
     document.getElementById('about-developer-btn').addEventListener('click', showAboutDeveloper);
@@ -315,5 +419,6 @@ function setupEventListeners() {
 document.addEventListener('DOMContentLoaded', () => {
     initWorkspace();
     setupEventListeners();
+    initSidebar();
     updatePythonCode();
 });

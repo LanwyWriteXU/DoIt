@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        :root {
+            --sidebar-bg: var(--dropdown-bg);
+            --sidebar-text: var(--text-color);
+            --sidebar-border: var(--border-color);
+            --sidebar-hover: var(--dropdown-hover);
+            --icon-filter: brightness(0);
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        body.night-mode {
+            --sidebar-bg: #2d2d2d;
+            --sidebar-text: #e0e0e0;
+            --sidebar-border: #444;
+            --sidebar-hover: #3d3d3d;
+            --icon-filter: brightness(0.8);
+        }
+        
+        .sidebar-content-body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+        }
+        
+        .sidebar-header {
+            padding: 12px;
+            border-bottom: 1px solid var(--sidebar-border);
+            background-color: var(--sidebar-bg);
+        }
+        
+        .file-tree {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .file-item {
+            padding: 6px 12px 6px 24px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .file-item:hover {
+            background-color: var(--sidebar-hover);
+        }
+        
+        .file-item::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-image: url('asset/file-icon.svg');
+            background-size: contain;
+            filter: var(--icon-filter);
+        }
+        
+        .folder-item {
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .folder-item::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-image: url('asset/folder-icon.svg');
+            background-size: contain;
+            filter: var(--icon-filter);
+        }
+    </style>
+</head>
+<body class="sidebar-content-body">
+    <div class="sidebar-header">
+        <h3>文件资源管理器</h3>
+    </div>
+    <div class="sidebar-content">
+        <div class="sidebar-file-explorer">
+            <ul class="file-tree">
+                <li class="folder-item">项目
+                    <ul>
+                        <li class="file-item">main.py</li>
+                        <li class="file-item">config.json</li>
+                        <!-- 测试内容 -->
+                        <li class="file-item">utils.py</li>
+                        <li class="file-item">settings.py</li>
+                        <li class="file-item">requirements.txt</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        // 解析URL参数获取初始主题
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialTheme = urlParams.get('theme') || 'light';
+        document.body.classList.toggle('night-mode', initialTheme === 'dark');
+        
+        // 处理主题同步消息
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'themeSync') {
+                document.body.classList.toggle('night-mode', event.data.isNightMode);
+            }
+        });
+        
+        // 通知父窗口已加载完成
+        window.parent.postMessage({ type: 'iframeLoaded' }, '*');
+    </script>
+</body>
+</html>

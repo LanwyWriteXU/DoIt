@@ -4,6 +4,66 @@
   box-sizing: border-box;
 }
 
+/* 保证不被选中 */
+button, .button-like {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+/* 确保下拉菜单中的按钮也不可选 */
+.dropdown-content button, 
+.about-dropdown-content button,
+.sidebar-btn,
+.tab-button,
+.action-btn,
+.collapse-btn,
+#copy-code-btn,
+.extension-install,
+.debug-controls button {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 特殊处理有图标的按钮，确保图标和文本都不被选中 */
+.dropdown-btn,
+.about-btn,
+.sidebar-btn {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 确保按钮内的图标也不被选中 */
+.dropdown-btn img,
+.about-btn img,
+.sidebar-btn img,
+.debug-icon,
+.extension-icon {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none; /* 防止图标被单独选中 */
+}
+
+/* 允许选择的区域 */
+#pythonCode,
+.console,
+.project-name-input,
+.search-box input,
+.debug-console,
+.extension-desc {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 :root {
   --bg-color: #f5f5f5;
   --text-color: #333;
@@ -53,7 +113,7 @@ body {
   font-family: 'Microsoft YaHei', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.3s, color 0.3s;
+  transition: none;
 }
 
 .blocklyMainBackground {
@@ -72,10 +132,11 @@ body {
   background-color: var(--toolbar-bg);
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   position: relative;
-  z-index: 100;
+  z-index: 99999;
 }
 
 .toolbar-title {
+  margin-right: 15px;
   display: flex;
   align-items: center;
   padding: 0 15px;
@@ -650,6 +711,56 @@ body {
   margin: 2px 0 !important;
 } */
 
+.blocklyContextMenu {
+  background-color: var(--dropdown-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 菜单项样式 */
+.blocklyMenuItem {
+  color: var(--text-color) !important;
+  font-family: 'Microsoft YaHei', sans-serif !important;
+}
+
+/* 菜单项悬停样式 */
+.blocklyMenuItem:hover {
+  background-color: var(--dropdown-hover) !important;
+}
+
+/* 禁用菜单项样式 */
+.blocklyMenuItemDisabled {
+  color: var(--text-color) !important;
+  opacity: 0.5 !important;
+}
+
+/* 菜单分隔线样式 */
+.blocklyMenuSeparator {
+  border-top: 1px solid var(--border-color) !important;
+}
+
+/* 子菜单箭头样式 */
+.blocklyMenuItem .goog-submenu-arrow {
+  color: var(--text-color) !important;
+}
+
+/* 夜间模式特定调整 */
+.night-mode .blocklyContextMenu {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 选中项样式 */
+.blocklyMenuItemHighlight {
+  background-color: var(--highlight-color) !important;
+}
+
+/* 文本输入框样式（如重命名变量时） */
+.blocklyContextMenu .blocklyMenuTextInput {
+  background-color: var(--dialog-input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
 /*替换部分*/
 
 .dropdown-content, .about-dropdown-content {
@@ -971,3 +1082,289 @@ body {
 .blocklyTreeRow[data-category="Python"] { color: #675BA5 !important; }
 .blocklyTreeRow[data-category="文件操作"] { color: #995BA5 !important; }
 .blocklyTreeRow[data-category="PyGame"] { color: #5B67A5 !important; }
+
+/* 侧栏样式 */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 84px; /* 工具栏高度 */
+  bottom: 0;
+  height: calc(100vh - 84px); /* 100vh - 工具栏高度(48px) - Tab栏高度(36px) */
+  width: 48px;
+  background-color: var(--dropdown-bg);
+  border-right: 1px solid var(--border-color);
+  z-index: 999;
+  display: flex;
+  overflow: hidden;
+  flex-direction: row;
+}
+
+.sidebar.expanded {
+  width: 320px;
+}
+
+.sidebar-buttons {
+  width: 48px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  border-right: 1px solid var(--border-color);
+  background-color: var(--dropdown-bg);
+}
+
+.sidebar-btn {
+  width: 100%;
+  height: 48px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: var(--text-color);
+}
+
+.sidebar-btn:hover {
+  background-color: var(--dropdown-hover);
+}
+
+.sidebar-btn.active {
+  background-color: var(--highlight-color);
+}
+
+.sidebar-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+/* 内容区域容器 */
+.sidebar-content-container {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+.sidebar.expanded .sidebar-content-container {
+  display: flex;
+  width: 272px; /* 320px总宽 - 48px按钮列 */
+}
+
+/* iFrame 容器 */
+.sidebar-frame-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* iFrame 本身 */
+#sidebar-frame {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: var(--dropdown-bg);
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow: hidden;  
+  display: block;
+}
+
+.sidebar.expanded .sidebar-content {
+  display: block;
+}
+
+.sidebar-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: var(--dropdown-bg);
+}
+
+/* 修改侧栏按钮图标样式 */
+.sidebar-btn img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0); /* 默认黑色图标 */
+  transition: filter 0.2s;
+}
+
+.night-mode .sidebar-btn img {
+  filter: brightness(1); /* 夜间模式白色图标 */
+}
+
+/* 活动状态的图标颜色 */
+.sidebar-btn.active img {
+  filter: brightness(0) invert(0.7); /* 活动状态稍亮的黑色 */
+}
+
+.night-mode .sidebar-btn.active img {
+  filter: brightness(1) invert(0.2); /* 夜间模式稍暗的白色 */
+}
+
+/* 只在主题同步时应用过渡 */
+.sidebar-content-body {
+  transition: background-color 0.15s ease-out, color 0.15s ease-out;
+}
+
+/* 图标切换保持即时 */
+.sidebar-btn img {
+  transition: none;
+}
+
+/* 调整主容器和工具箱位置 */
+.container {
+  margin-left: 48px;
+}
+
+.sidebar.expanded ~ .container {
+  margin-left: 320px;
+}
+
+/* 调整工具箱位置 */
+.custom-toolbox-container {
+  left: 48px;
+}
+
+.sidebar.expanded ~ .custom-toolbox-container {
+  left: 320px;
+}
+
+/* 侧栏内容样式 */
+.sidebar-content-body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: var(--dropdown-bg);
+  color: var(--text-color);
+}
+
+.sidebar-header {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.sidebar-file-explorer,
+.sidebar-debug-console,
+.sidebar-extensions-market {
+  padding: 8px;
+}
+
+/* 侧栏内容暗黑模式适配 */
+.sidebar-content-body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: var(--dropdown-bg);
+  color: var(--text-color);
+}
+
+.sidebar-header {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--dropdown-bg);
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--text-color);
+}
+
+.sidebar-file-explorer,
+.sidebar-debug-console,
+.sidebar-extensions-market {
+  padding: 8px;
+  background-color: var(--dropdown-bg);
+  color: var(--text-color);
+}
+
+/* 侧栏内容中的通用元素样式 */
+.sidebar-content-body input,
+.sidebar-content-body select,
+.sidebar-content-body button {
+  background-color: var(--dialog-input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.sidebar-content-body button:hover {
+  background-color: var(--dropdown-hover);
+}
+
+/* 文件树样式 */
+.sidebar-file-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-file-item:hover {
+  background-color: var(--dropdown-hover);
+}
+
+.sidebar-file-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  filter: brightness(var(--icon-brightness, 0));
+}
+
+.night-mode .sidebar-file-icon {
+  --icon-brightness: 1;
+}
+
+.sidebar-content {
+  height: calc(100% - 40px); 
+  overflow-y: auto;
+  scrollbar-gutter: stable; 
+}
+
+/* 滚动条整体样式 - 适用于Webkit浏览器 */
+.sidebar-content::-webkit-scrollbar {
+  width: 4px; 
+  background-color: transparent;
+}
+
+/* 滚动条轨道 */
+.sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 0;
+}
+
+/* 滚动条滑块 */
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: rgba(100, 100, 100, 0.3);
+  border-radius: 0; /* 长方形 */
+  transition: background 0.2s;
+}
+
+/* 暗黑模式适配 */
+.night-mode .sidebar-content::-webkit-scrollbar-thumb {
+  background: rgba(200, 200, 200, 0.3);
+}
+
+/* Firefox适配 */
+@supports (scrollbar-color: auto) {
+  .sidebar-content {
+    scrollbar-color: rgba(100, 100, 100, 0.3) transparent;
+    scrollbar-width: thin; 
+  }
+  .night-mode .sidebar-content {
+    scrollbar-color: rgba(200, 200, 200, 0.3) transparent;
+  }
+}

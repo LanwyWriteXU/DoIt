@@ -1,15 +1,168 @@
-<div class="extensions-panel">
-    <h3>扩展市场</h3>
-        <div class="extension-list">
-        <div class="extension-item">
-            <h4>PyGame 支持</h4>
-            <p>添加 PyGame 游戏开发模块</p>
-            <button class="install-btn">安装</button>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        :root {
+            --sidebar-bg: var(--dropdown-bg);
+            --sidebar-text: var(--text-color);
+            --sidebar-border: var(--border-color);
+            --sidebar-hover: var(--dropdown-hover);
+            --icon-filter: brightness(0);
+            --extension-bg: var(--dropdown-bg);
+            --extension-border: var(--border-color);
+        }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body.night-mode {
+            --sidebar-bg: #2d2d2d;
+            --sidebar-text: #e0e0e0;
+            --sidebar-border: #444;
+            --sidebar-hover: #3d3d3d;
+            --icon-filter: brightness(0.8);
+            --extension-bg: #252526;
+            --extension-border: #444;
+        }
+        
+        .sidebar-content-body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+        }
+        
+        .sidebar-header {
+            padding: 12px;
+            border-bottom: 1px solid var(--sidebar-border);
+            background-color: var(--sidebar-bg);
+        }
+        
+        .search-box {
+            padding: 8px;
+            border-bottom: 1px solid var(--sidebar-border);
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 6px 12px;
+            border: 1px solid var(--sidebar-border);
+            border-radius: 4px;
+            background-color: var(--dialog-input-bg);
+            color: var(--sidebar-text);
+        }
+        
+        .extension-list {
+            padding: 8px;
+        }
+        
+        .extension-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--extension-border);
+            border-radius: 4px;
+            background-color: var(--extension-bg);
+            display: flex;
+            align-items: center;
+        }
+        
+        .extension-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
+            filter: var(--icon-filter);
+        }
+        
+        .extension-info {
+            flex: 1;
+        }
+        
+        .extension-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .extension-desc {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .extension-install {
+            background-color: var(--dialog-button-bg);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="sidebar-content-body">
+    <div class="sidebar-header">
+        <h3>扩展市场</h3>
+    </div>
+    <div class="sidebar-content">
+        <div class="search-box">
+            <input type="text" placeholder="搜索扩展...">
         </div>
-        <div class="extension-item">
-            <h4>数据可视化</h4>
-            <p>添加 Matplotlib 支持</p>
-            <button class="install-btn">安装</button>
+        <div class="extension-list">
+            <div class="extension-item">
+                <img src="asset/__icon__.svg" class="extension-icon">
+                <div class="extension-info">
+                    <div class="extension-name">Python支持</div>
+                    <div class="extension-desc">增强Python语言支持，提供代码补全和语法高亮</div>
+                </div>
+                <button class="extension-install">安装</button>
+            </div>
+            <div class="extension-item">
+                <img src="asset/__icon__.svg" class="extension-icon">
+                <div class="extension-info">
+                    <div class="extension-name">Blockly增强</div>
+                    <div class="extension-desc">添加更多Blockly积木和功能</div>
+                </div>
+                <button class="extension-install">安装</button>
+            </div>
         </div>
     </div>
-</div>
+    <script>
+        // 解析URL参数获取初始主题
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialTheme = urlParams.get('theme') || 'light';
+        document.body.classList.toggle('night-mode', initialTheme === 'dark');
+        
+        // 处理主题同步消息
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'themeSync') {
+                document.body.classList.toggle('night-mode', event.data.isNightMode);
+            }
+        });
+        
+        // 搜索功能
+        document.querySelector('.search-box input').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            document.querySelectorAll('.extension-item').forEach(item => {
+                const name = item.querySelector('.extension-name').textContent.toLowerCase();
+                const desc = item.querySelector('.extension-desc').textContent.toLowerCase();
+                item.style.display = (name.includes(searchTerm) || desc.includes(searchTerm)) ? 'flex' : 'none';
+            });
+        });
+        
+        // 安装按钮功能
+        document.querySelectorAll('.extension-install').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const extensionName = this.closest('.extension-item').querySelector('.extension-name').textContent;
+                this.textContent = '已安装';
+                this.disabled = true;
+                console.log(`已安装扩展: ${extensionName}`);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -58,6 +58,26 @@
     </div>
   </div>
 
+  <!--侧栏，像VSCode-->
+  <div class="sidebar">
+    <div class="sidebar-buttons">
+      <button class="sidebar-btn" id="files-btn" title="文件">
+        <img src="asset/explorer-icon.svg" alt="文件">
+      </button>
+      <button class="sidebar-btn" id="debug-btn" title="Debug">
+        <img src="asset/debug-icon.svg" alt="Debug">
+      </button>
+      <button class="sidebar-btn" id="extensions-btn" title="扩展">
+        <img src="asset/extensions-icon.svg" alt="扩展">
+      </button>
+    </div>
+    <div class="sidebar-content-container">
+      <div class="sidebar-frame-container">
+        <iframe id="sidebar-frame" class="sidebar-frame"></iframe>
+      </div>
+    </div>
+  </div>
+
   <!--Tab栏-->
   <div class="tab-bar">
     <!-- 左侧标签部分 -->
@@ -205,12 +225,12 @@
       <!-- Blockly会自动在这里生成工具箱内容 -->
       <div id="blocklyToolbox"></div>
     </div>
-    <div class="toolbox-extension-button">
+    <!-- <div class="toolbox-extension-button">
       <div class="extension-btn-inner">
         <div class="extension-icon"></div>
         <span>扩展</span>
       </div>
-    </div>
+    </div> -->
   </div>
   
 </body>
