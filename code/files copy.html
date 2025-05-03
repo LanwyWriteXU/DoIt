@@ -525,31 +525,3 @@
     </script>
 </body>
 </html>
-<sprite>
-window.addEventListener('load', async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const basePath = urlParams.get('path') || '';
-    
-    async function loadDirectory(path) {
-        const files = await window.electronAPI.readDirectory(path);
-        const fileTree = document.querySelector('.file-tree');
-        fileTree.innerHTML = generateTree(files);
-    }
-
-    function generateTree(files) {
-        return files.map(file => `
-            <li class="${file.isDirectory ? 'folder-item' : 'file-item'}">
-                <div class="file-icon-container">
-                    <img src="asset/${file.isDirectory ? 'folder' : 'file'}-icon.svg" 
-                         class="file-icon" 
-                         alt="${file.isDirectory ? 'Folder' : 'File'}">
-                </div>
-                <span class="file-name">${file.name}</span>
-                ${file.isDirectory ? '<div class="folder-children"></div>' : ''}
-            </li>
-        `).join('');
-    }
-
-    loadDirectory(basePath);
-});
-</sprite>

@@ -134,6 +134,51 @@ function newFile() {
     }
 }
 
+// 文件操作函数
+// 在文件顶部添加类型声明
+const ipcRenderer = window.electronAPI?.ipcRenderer || {
+  invoke: (channel, data) => {
+    console.log(`Invoking ${channel} with`, data);
+    return window.electronAPI.invoke(channel, data);
+  },
+  on: (channel, listener) => {
+    window.electronAPI.on(channel, listener);
+  },
+  send: () => console.warn('ipcRenderer not available in browser environment'),
+  on: () => console.warn('ipcRenderer not available in browser environment')
+};
+
+// 修改导出项目函数
+function exportProject() {
+    try {
+        const projectName = document.getElementById('project-name').value || 'New Project';
+        window.electronAPI.invoke('export-project', projectName);
+    } catch (error) {
+        console.error('导出失败:', error);
+        alert('导出项目时出错: ' + error.message);
+    }
+}
+
+// 修改事件监听方式
+window.electronAPI.on('export-complete', (zipPath) => {
+    console.log('项目已导出到:', zipPath);
+    alert(`项目已成功导出为 ${path.basename(zipPath)}`);
+});
+
+function importProject() {
+    ipcRenderer.send('import-project');
+}
+
+// 监听导出完成事件
+if (window.electronAPI && window.electronAPI.on) {
+    window.electronAPI.on('export-complete', (zipPath) => {
+        console.log('项目已导出到:', zipPath);
+        alert(`项目已成功导出为 ${path.basename(zipPath)}`);
+    });
+} else {
+    console.error('electronAPI未正确初始化');
+}
+
 function exportWorkspace() {
     try {
       const projectName = document.getElementById('project-name').value || 'New Project';
@@ -152,7 +197,7 @@ function exportWorkspace() {
     }
   }
 
-  function importWorkspace() {
+function importWorkspace() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.xml';
@@ -271,7 +316,24 @@ function initSidebar() {
     const filesBtn = document.getElementById('files-btn');
     const debugBtn = document.getElementById('debug-btn');
     const extensionsBtn = document.getElementById('extensions-btn');
+
     const sidebarFrame = document.getElementById('sidebar-frame');
+    sidebarFrame.addEventListener('load', () => {
+        try {
+            // 添加安全验证
+            if (!window.electronAPI || !sidebarFrame.contentWindow) return;
+            
+            // 暴露有限API
+            const exposedAPI = {
+                openFile: () => window.electronAPI.openFile(),
+                showDialog: (options) => window.electronAPI.showDialog(options)
+            };
+            
+            sidebarFrame.contentWindow.electron = exposedAPI;
+        } catch (e) {
+            console.error('安全上下文错误:', e);
+        }
+    });
 
     // 切换侧栏展开/折叠 - 直接显示/隐藏，无动画
     function toggleSidebar(expand) {
@@ -346,6 +408,21 @@ function setupEventListeners() {
     // 文件操作
     document.getElementById('save-btn').addEventListener('click', saveFile);
     document.getElementById('new-btn').addEventListener('click', newFile);
+    document.getElementById('export-project-btn').addEventListener('click', exportProject);
+    document.getElementById('import-project-btn').addEventListener('click', async () => {
+        const projectPath = await window.electronAPI.importProject();
+        if (projectPath) {
+            window.electronAPI.requestProjectPath();
+            // 加载文件树
+            document.getElementById('sidebar-frame').src = `code/files.html?path=${encodeURIComponent(projectPath)}`;
+        }
+    });
+
+    document.getElementById('export-project-btn').addEventListener('click', () => {
+        const projectName = document.getElementById('project-name').value;
+        window.electronAPI.exportProject(projectName);
+    });
+
     document.getElementById('export-xml-btn').addEventListener('click', exportWorkspace);
     document.getElementById('import-xml-btn').addEventListener('click', importWorkspace);
     document.getElementById('project-name').addEventListener('change', (e) => {
