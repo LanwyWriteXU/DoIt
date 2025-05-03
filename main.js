@@ -17,6 +17,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,  // 必须禁用nodeIntegration
       contextIsolation: true,  // 启用上下文隔离
+      enableRemoteModule: false,  // 禁用remote模块
       sandbox: true            // 启用沙箱模式
     },
   });

@@ -410,11 +410,20 @@ function setupEventListeners() {
     document.getElementById('new-btn').addEventListener('click', newFile);
     document.getElementById('export-project-btn').addEventListener('click', exportProject);
     document.getElementById('import-project-btn').addEventListener('click', async () => {
-        const projectPath = await window.electronAPI.importProject();
+        // 添加通信验证
+        if (!window.electronAPI) {
+            console.error('Electron API未初始化');
+            return;
+        }
+        const projectPath = await window.electronAPI.invoke('import-project');
         if (projectPath) {
-            window.electronAPI.requestProjectPath();
-            // 加载文件树
-            document.getElementById('sidebar-frame').src = `code/files.html?path=${encodeURIComponent(projectPath)}`;
+            window.electronAPI.invoke('request-project-path');
+            // 加载文件树时添加错误处理
+            try {
+                document.getElementById('sidebar-frame').src = `code/files.html?path=${encodeURIComponent(projectPath)}`;
+            } catch (error) {
+                console.error('加载文件树失败:', error);
+            }
         }
     });
 
