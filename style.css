@@ -445,11 +445,12 @@ body {
 
 .output-container {
   width: 480px;
-  height: 100%;
+  height: calc(100% - 48px); /* 减去工具栏高度 */
   position: relative;
   display: flex;
   background-color: var(--output-bg);
   border-left: 1px solid var(--border-color);
+  box-sizing: border-box;
 }
 
 .resize-handle {
@@ -530,17 +531,65 @@ body {
   tab-size: 4;
 }
 
-.console {
+#console {
+  height: 360px; /* 固定高度 */
   width: 100%;
-  height: 360px;
-  background-color: var(--console-bg);
-  color: var(--console-text);
-  border-top: 1px solid var(--console-border);
-  font-family: 'Consolas', 'Monaco', monospace;
-  padding: 10px;
+  padding: 0px;
+  margin: 0; /* 移除外边距 */
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden !important;
+  display: flex;
+}
+
+#terminal {
+  font-family: 'Consolas', 'Microsoft YaHei', monospace;
+  background-color: #1e1e1e !important;
+  color: #d4d4d4 !important;
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  flex: 1;
   overflow-y: auto;
   white-space: pre-wrap;
+  padding: 8px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.terminal-input {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 300px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid #3c3c3c;
+  color: #1e1e1e;
+  z-index: 1000;
+  border-radius: 4px;
+  font-family: 'Microsoft YaHei UI', sans-serif;
+}
+
+.night-mode .terminal-input {
+  background: rgba(30,30,30,0.9);
+  color: #e0e0e0;
+  border-color: #666;
+}
+
+
+.prompt {
+  color: #569cd6;
+}
+
+/* 自定义滚动条 */
+#terminal::-webkit-scrollbar {
+  width: 8px;
+}
+
+#terminal::-webkit-scrollbar-thumb {
+  background-color: #666;
+  border-radius: 4px;
 }
 
 /*about按键*/
@@ -1367,4 +1416,30 @@ body {
   .night-mode .sidebar-content {
     scrollbar-color: rgba(200, 200, 200, 0.3) transparent;
   }
+}
+
+#terminal::after {
+  content: "▋";
+  animation: cursor-blink 1s infinite;
+}
+
+@keyframes cursor-blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* 移除滚动条 */
+#terminal::-webkit-scrollbar {
+  display: none;
+}
+
+/* 修复输入区域 */
+#terminal:focus {
+  outline: none;
+}
+
+.night-mode #terminal {
+  background-color: #252526;
+  color: #e0e0e0;
 }

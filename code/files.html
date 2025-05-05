@@ -9,9 +9,6 @@
             --sidebar-border: var(--border-color);
             --sidebar-hover: var(--dropdown-hover);
             --icon-filter: brightness(0);
-            --context-menu-bg: var(--dropdown-bg);
-            --context-menu-text: var(--text-color);
-            --context-menu-hover: var(--dropdown-hover);
         }
 
         html, body {
@@ -28,9 +25,6 @@
             --sidebar-border: #444;
             --sidebar-hover: #3d3d3d;
             --icon-filter: brightness(0.8);
-            --context-menu-bg: #3d3d3d;
-            --context-menu-text: #e0e0e0;
-            --context-menu-hover: #4d4d4d;
         }
         
         .sidebar-content-body {
@@ -51,167 +45,47 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            user-select: none;
         }
         
-        .file-item, .folder-item {
+        .file-item {
             padding: 6px 12px 6px 24px;
             cursor: pointer;
             position: relative;
-            display: flex;
-            align-items: center;
         }
         
-        .file-item:hover, .folder-item:hover {
+        .file-item:hover {
             background-color: var(--sidebar-hover);
         }
         
-        .file-icon, .folder-icon {
+        .file-item::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
             width: 16px;
             height: 16px;
-            margin-right: 8px;
+            background-image: url('asset/file-icon.svg');
+            background-size: contain;
             filter: var(--icon-filter);
         }
         
-        .file-name {
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .folder-item {
+            padding-left: 24px;
+            position: relative;
         }
         
-        .folder-children {
-            padding-left: 16px;
-            display: none;
-        }
-        
-        .folder-item.expanded > .folder-children {
-            display: block;
-        }
-        
-        .folder-toggle {
+        .folder-item::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
             width: 16px;
             height: 16px;
-            margin-right: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
-        
-        .folder-item.expanded > .folder-toggle {
-            transform: rotate(90deg);
-        }
-        
-        .file-actions {
-            display: none;
-            position: absolute;
-            right: 8px;
-        }
-        
-        .file-item:hover .file-actions, 
-        .folder-item:hover .file-actions {
-            display: flex;
-            gap: 4px;
-        }
-        
-        .file-action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 16px;
-            height: 16px;
-            opacity: 0.6;
-        }
-        
-        .file-action-btn:hover {
-            opacity: 1;
-        }
-        
-        .context-menu {
-            position: absolute;
-            background-color: var(--context-menu-bg);
-            border: 1px solid var(--sidebar-border);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            min-width: 160px;
-            display: none;
-        }
-        
-        .context-menu-item {
-            padding: 8px 16px;
-            cursor: pointer;
-            color: var(--context-menu-text);
-        }
-        
-        .context-menu-item:hover {
-            background-color: var(--context-menu-hover);
-        }
-        
-        .context-menu-divider {
-            height: 1px;
-            background-color: var(--sidebar-border);
-            margin: 4px 0;
-        }
-        
-        .dialog-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-            display: none;
-        }
-        
-        .dialog {
-            background-color: var(--sidebar-bg);
-            border: 1px solid var(--sidebar-border);
-            border-radius: 4px;
-            padding: 16px;
-            min-width: 300px;
-        }
-        
-        .dialog-title {
-            margin-bottom: 16px;
-            font-weight: bold;
-        }
-        
-        .dialog-input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 16px;
-            background-color: var(--dialog-input-bg);
-            border: 1px solid var(--sidebar-border);
-            color: var(--sidebar-text);
-        }
-        
-        .dialog-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-        }
-        
-        .dialog-btn {
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .dialog-btn-primary {
-            background-color: var(--dialog-button-bg);
-            color: white;
-            border: none;
-        }
-        
-        .dialog-btn-secondary {
-            background-color: transparent;
-            border: 1px solid var(--sidebar-border);
-            color: var(--sidebar-text);
+            background-image: url('asset/folder-icon.svg');
+            background-size: contain;
+            filter: var(--icon-filter);
         }
     </style>
 </head>
@@ -221,33 +95,20 @@
     </div>
     <div class="sidebar-content">
         <div class="sidebar-file-explorer">
-            <ul class="file-tree" id="fileTree">
-                <!-- 文件树将通过JavaScript动态生成 -->
+            <ul class="file-tree">
+                <li class="folder-item">项目
+                    <ul>
+                        <li class="file-item">main.py</li>
+                        <li class="file-item">config.json</li>
+                        <!-- 测试内容 -->
+                        <li class="file-item">utils.py</li>
+                        <li class="file-item">settings.py</li>
+                        <li class="file-item">requirements.txt</li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
-    
-    <!-- 右键菜单 -->
-    <div class="context-menu" id="contextMenu">
-        <div class="context-menu-item" id="contextNewFile">新建文件</div>
-        <div class="context-menu-item" id="contextNewFolder">新建文件夹</div>
-        <div class="context-menu-divider"></div>
-        <div class="context-menu-item" id="contextRename">重命名</div>
-        <div class="context-menu-item" id="contextDelete">删除</div>
-    </div>
-    
-    <!-- 对话框 -->
-    <div class="dialog-overlay" id="dialogOverlay">
-        <div class="dialog">
-            <div class="dialog-title" id="dialogTitle">对话框标题</div>
-            <input type="text" class="dialog-input" id="dialogInput" placeholder="输入名称">
-            <div class="dialog-buttons">
-                <button class="dialog-btn dialog-btn-secondary" id="dialogCancel">取消</button>
-                <button class="dialog-btn dialog-btn-primary" id="dialogConfirm">确认</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // 解析URL参数获取初始主题
         const urlParams = new URLSearchParams(window.location.search);
@@ -263,293 +124,6 @@
         
         // 通知父窗口已加载完成
         window.parent.postMessage({ type: 'iframeLoaded' }, '*');
-        
-        // 文件系统相关变量
-        let currentProjectPath = '';
-        let selectedItem = null;
-        
-        // 与主进程通信
-        
-        //旧实现
-        // const { ipcRenderer } = require('electron');
-
-        // 确保 electronAPI 已加载
-        if (window.electronAPI) {
-        window.electronAPI.readDirectory(currentProjectPath)
-            .then(files => renderFileTree(files))
-            .catch(err => console.error('读取目录失败:', err));
-        } else {
-            console.error('electronAPI 未定义！');
-        }
-        
-        // 监听主进程发送的项目路径
-        ipcRenderer.on('project-path', (event, path) => {
-            currentProjectPath = path;
-            loadFileTree();
-        });
-        
-        // 加载文件树
-        function loadFileTree() {
-            if (!currentProjectPath) return;
-            
-            ipcRenderer.invoke('read-directory', currentProjectPath).then(files => {
-                renderFileTree(files);
-            }).catch(err => {
-                console.error('读取目录失败:', err);
-            });
-        }
-        
-        // 渲染文件树
-        function renderFileTree(files, parentElement = document.getElementById('fileTree')) {
-            parentElement.innerHTML = '';
-            
-            files.forEach(file => {
-                const li = document.createElement('li');
-                li.dataset.path = file.path;
-                
-                if (file.isDirectory) {
-                    li.className = 'folder-item';
-                    li.innerHTML = `
-                        <div class="folder-toggle">▶</div>
-                        <img src="asset/folder-icon.svg" class="folder-icon">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-actions">
-                            <button class="file-action-btn" data-action="new-file" title="新建文件">
-                                <img src="asset/new-file-icon.svg" width="12" height="12">
-                            </button>
-                            <button class="file-action-btn" data-action="new-folder" title="新建文件夹">
-                                <img src="asset/new-folder-icon.svg" width="12" height="12">
-                            </button>
-                            <button class="file-action-btn" data-action="delete" title="删除">
-                                <img src="asset/delete-icon.svg" width="12" height="12">
-                            </button>
-                        </div>
-                    `;
-                    
-                    const childrenUl = document.createElement('ul');
-                    childrenUl.className = 'folder-children';
-                    li.appendChild(childrenUl);
-                    
-                    if (file.children && file.children.length > 0) {
-                        renderFileTree(file.children, childrenUl);
-                        li.classList.add('expanded');
-                    }
-                    
-                    // 文件夹点击事件
-                    li.querySelector('.folder-toggle').addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        li.classList.toggle('expanded');
-                        
-                        if (li.classList.contains('expanded') && childrenUl.children.length === 0) {
-                            ipcRenderer.invoke('read-directory', file.path).then(childFiles => {
-                                renderFileTree(childFiles, childrenUl);
-                            });
-                        }
-                    });
-                } else {
-                    li.className = 'file-item';
-                    li.innerHTML = `
-                        <img src="asset/file-icon.svg" class="file-icon">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-actions">
-                            <button class="file-action-btn" data-action="rename" title="重命名">
-                                <img src="asset/rename-icon.svg" width="12" height="12">
-                            </button>
-                            <button class="file-action-btn" data-action="delete" title="删除">
-                                <img src="asset/delete-icon.svg" width="12" height="12">
-                            </button>
-                        </div>
-                    `;
-                    
-                    // 文件点击事件 - 打开文件
-                    li.addEventListener('click', () => {
-                        ipcRenderer.send('open-file', file.path);
-                    });
-                }
-                
-                // 右键菜单
-                li.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    selectedItem = file;
-                    showContextMenu(e.clientX, e.clientY, file.isDirectory);
-                });
-                
-                // 操作按钮事件
-                if (li.querySelector('.file-actions')) {
-                    li.querySelectorAll('.file-action-btn').forEach(btn => {
-                        btn.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            selectedItem = file;
-                            const action = btn.dataset.action;
-                            
-                            if (action === 'new-file') {
-                                showDialog('新建文件', '', (name) => {
-                                    ipcRenderer.invoke('create-file', file.path + '/' + name).then(() => {
-                                        loadFileTree();
-                                    });
-                                });
-                            } else if (action === 'new-folder') {
-                                showDialog('新建文件夹', '', (name) => {
-                                    ipcRenderer.invoke('create-directory', file.path + '/' + name).then(() => {
-                                        loadFileTree();
-                                    });
-                                });
-                            } else if (action === 'rename') {
-                                showDialog('重命名', file.name, (newName) => {
-                                    ipcRenderer.invoke('rename-file', {
-                                        oldPath: file.path,
-                                        newPath: file.path.replace(file.name, newName)
-                                    }).then(() => {
-                                        loadFileTree();
-                                    });
-                                });
-                            } else if (action === 'delete') {
-                                if (confirm(`确定要删除 ${file.name} 吗？`)) {
-                                    ipcRenderer.invoke('delete-file', file.path).then(() => {
-                                        loadFileTree();
-                                    });
-                                }
-                            }
-                        });
-                    });
-                }
-                
-                parentElement.appendChild(li);
-            });
-        }
-        
-        // 显示右键菜单
-        function showContextMenu(x, y, isDirectory) {
-            const contextMenu = document.getElementById('contextMenu');
-            contextMenu.style.display = 'block';
-            contextMenu.style.left = `${x}px`;
-            contextMenu.style.top = `${y}px`;
-            
-            // 设置菜单项显示/隐藏
-            document.getElementById('contextNewFile').style.display = isDirectory ? 'block' : 'none';
-            document.getElementById('contextNewFolder').style.display = isDirectory ? 'block' : 'none';
-            
-            // 添加菜单项事件
-            document.getElementById('contextNewFile').onclick = () => {
-                showDialog('新建文件', '', (name) => {
-                    ipcRenderer.invoke('create-file', selectedItem.path + '/' + name).then(() => {
-                        loadFileTree();
-                        contextMenu.style.display = 'none';
-                    });
-                });
-            };
-            
-            document.getElementById('contextNewFolder').onclick = () => {
-                showDialog('新建文件夹', '', (name) => {
-                    ipcRenderer.invoke('create-directory', selectedItem.path + '/' + name).then(() => {
-                        loadFileTree();
-                        contextMenu.style.display = 'none';
-                    });
-                });
-            };
-            
-            document.getElementById('contextRename').onclick = () => {
-                showDialog('重命名', selectedItem.name, (newName) => {
-                    ipcRenderer.invoke('rename-file', {
-                        oldPath: selectedItem.path,
-                        newPath: selectedItem.path.replace(selectedItem.name, newName)
-                    }).then(() => {
-                        loadFileTree();
-                        contextMenu.style.display = 'none';
-                    });
-                });
-            };
-            
-            document.getElementById('contextDelete').onclick = () => {
-                if (confirm(`确定要删除 ${selectedItem.name} 吗？`)) {
-                    ipcRenderer.invoke('delete-file', selectedItem.path).then(() => {
-                        loadFileTree();
-                        contextMenu.style.display = 'none';
-                    });
-                }
-            };
-        }
-        
-        // 显示对话框
-        function showDialog(title, defaultValue, callback) {
-            const dialogOverlay = document.getElementById('dialogOverlay');
-            const dialogTitle = document.getElementById('dialogTitle');
-            const dialogInput = document.getElementById('dialogInput');
-            const dialogCancel = document.getElementById('dialogCancel');
-            const dialogConfirm = document.getElementById('dialogConfirm');
-            
-            dialogTitle.textContent = title;
-            dialogInput.value = defaultValue;
-            dialogOverlay.style.display = 'flex';
-            
-            const closeDialog = () => {
-                dialogOverlay.style.display = 'none';
-                document.getElementById('contextMenu').style.display = 'none';
-            };
-            
-            const handleConfirm = () => {
-                const value = dialogInput.value.trim();
-                if (value) {
-                    callback(value);
-                    closeDialog();
-                }
-            };
-            
-            dialogInput.focus();
-            dialogInput.select();
-            
-            dialogCancel.onclick = closeDialog;
-            dialogConfirm.onclick = handleConfirm;
-            
-            dialogInput.addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') handleConfirm();
-                if (e.key === 'Escape') closeDialog();
-            });
-        }
-        
-        // 点击其他地方关闭菜单
-        document.addEventListener('click', () => {
-            document.getElementById('contextMenu').style.display = 'none';
-        });
-        
-        document.getElementById('import-btn').addEventListener('click', async () => {
-            const projectPath = await window.electronAPI.importProject();
-            if (projectPath) {
-                currentProjectPath = projectPath;
-                loadFileTree(); // 重新加载文件树
-            }
-        });
-
-        // 初始化时请求项目路径
-        ipcRenderer.send('request-project-path');
     </script>
 </body>
 </html>
-<sprite>
-window.addEventListener('load', async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const basePath = urlParams.get('path') || '';
-    
-    async function loadDirectory(path) {
-        const files = await window.electronAPI.readDirectory(path);
-        const fileTree = document.querySelector('.file-tree');
-        fileTree.innerHTML = generateTree(files);
-    }
-
-    function generateTree(files) {
-        return files.map(file => `
-            <li class="${file.isDirectory ? 'folder-item' : 'file-item'}">
-                <div class="file-icon-container">
-                    <img src="asset/${file.isDirectory ? 'folder' : 'file'}-icon.svg" 
-                         class="file-icon" 
-                         alt="${file.isDirectory ? 'Folder' : 'File'}">
-                </div>
-                <span class="file-name">${file.name}</span>
-                ${file.isDirectory ? '<div class="folder-children"></div>' : ''}
-            </li>
-        `).join('');
-    }
-
-    loadDirectory(basePath);
-});
-</sprite>

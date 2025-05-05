@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron . & node server.js"
   },
-  "dependencies": {
-    "adm-zip": "^0.5.16",
-    "electron": "^35.2.0"
+  "devDependencies": {
+    "electron": "^36.1.0",
+    "ws": "^8.18.2"
   }
 }

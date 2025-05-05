@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
   <title>DoIt! - 放手去做！</title>
   <link rel="icon" href="icon.svg">
   <link rel="stylesheet" href="style.css">
   <script src="blockly.min.js"></script>
   <script src="blocks.js"></script>
   <script src="python_compressed.js"></script>
-  <!-- <script src="preload.js"></script> -->
-
+  
   <!--汉化-->
   <script src="zh-hans.js"></script>
 </head>
@@ -30,8 +28,6 @@
       <div class="dropdown-content">
         <button id="save-btn">保存</button>
         <button id="new-btn">新建</button>
-        <button id="export-project-btn">导出项目</button>
-        <button id="import-project-btn">导入项目</button>
         <button id="export-xml-btn">导出XML</button>
         <button id="import-xml-btn">导入XML</button>
       </div>
@@ -72,7 +68,7 @@
         <img src="asset/debug-icon.svg" alt="Debug">
       </button>
       <button class="sidebar-btn" id="extensions-btn" title="扩展">
-        <img src="asset/extension-icon.svg" alt="扩展">
+        <img src="asset/extensions-icon.svg" alt="扩展">
       </button>
     </div>
     <div class="sidebar-content-container">
@@ -119,7 +115,9 @@
           </div>
           <div id="pythonCode" class="python-code"></div>
         </div>
-        <div class="console" id="console"></div>
+        <div class="console" id="console">
+          <div id="terminal"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -206,6 +204,11 @@
     </category>
   </xml>
 
+  <!--加载preload-->
+  <script>
+    require('./preload');
+  </script>
+
   <!--函数块定义代码-->
   <script src="blocks/python_list.js"></script>
   <script src="blocks/python_io.js"></script>
@@ -221,7 +224,7 @@
   <script src="code/create_var.js"></script>
   
   <!--主函数-->
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 
   <!-- 修改后的工具箱容器结构 -->
   <div class="custom-toolbox-container">
@@ -229,6 +232,12 @@
       <!-- Blockly会自动在这里生成工具箱内容 -->
       <div id="blocklyToolbox"></div>
     </div>
+    <!-- <div class="toolbox-extension-button">
+      <div class="extension-btn-inner">
+        <div class="extension-icon"></div>
+        <span>扩展</span>
+      </div>
+    </div> -->
   </div>
   
 </body>

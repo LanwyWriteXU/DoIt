@@ -12,6 +12,9 @@ const appState = {
     projectName: "New Project",
     sidebarExpanded: false,
     activeSidebarTab: null,
+    terminalHistory: [],
+    commandHistory: [],
+    historyIndex: -1,
 };
 
 // 初始化 Blockly 工作区
@@ -70,6 +73,7 @@ function initWorkspace() {
 
     registerPythonGenerators();
     workspace.addChangeListener(updatePythonCode);
+    setupTerminal();
 
     // 确保工作区初始大小正确
     setTimeout(() => Blockly.svgResize(workspace), 100);
@@ -134,51 +138,6 @@ function newFile() {
     }
 }
 
-// 文件操作函数
-// 在文件顶部添加类型声明
-const ipcRenderer = window.electronAPI?.ipcRenderer || {
-  invoke: (channel, data) => {
-    console.log(`Invoking ${channel} with`, data);
-    return window.electronAPI.invoke(channel, data);
-  },
-  on: (channel, listener) => {
-    window.electronAPI.on(channel, listener);
-  },
-  send: () => console.warn('ipcRenderer not available in browser environment'),
-  on: () => console.warn('ipcRenderer not available in browser environment')
-};
-
-// 修改导出项目函数
-function exportProject() {
-    try {
-        const projectName = document.getElementById('project-name').value || 'New Project';
-        window.electronAPI.invoke('export-project', projectName);
-    } catch (error) {
-        console.error('导出失败:', error);
-        alert('导出项目时出错: ' + error.message);
-    }
-}
-
-// 修改事件监听方式
-window.electronAPI.on('export-complete', (zipPath) => {
-    console.log('项目已导出到:', zipPath);
-    alert(`项目已成功导出为 ${path.basename(zipPath)}`);
-});
-
-function importProject() {
-    ipcRenderer.send('import-project');
-}
-
-// 监听导出完成事件
-if (window.electronAPI && window.electronAPI.on) {
-    window.electronAPI.on('export-complete', (zipPath) => {
-        console.log('项目已导出到:', zipPath);
-        alert(`项目已成功导出为 ${path.basename(zipPath)}`);
-    });
-} else {
-    console.error('electronAPI未正确初始化');
-}
-
 function exportWorkspace() {
     try {
       const projectName = document.getElementById('project-name').value || 'New Project';
@@ -197,7 +156,7 @@ function exportWorkspace() {
     }
   }
 
-function importWorkspace() {
+  function importWorkspace() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.xml';
@@ -316,24 +275,7 @@ function initSidebar() {
     const filesBtn = document.getElementById('files-btn');
     const debugBtn = document.getElementById('debug-btn');
     const extensionsBtn = document.getElementById('extensions-btn');
-
     const sidebarFrame = document.getElementById('sidebar-frame');
-    sidebarFrame.addEventListener('load', () => {
-        try {
-            // 添加安全验证
-            if (!window.electronAPI || !sidebarFrame.contentWindow) return;
-            
-            // 暴露有限API
-            const exposedAPI = {
-                openFile: () => window.electronAPI.openFile(),
-                showDialog: (options) => window.electronAPI.showDialog(options)
-            };
-            
-            sidebarFrame.contentWindow.electron = exposedAPI;
-        } catch (e) {
-            console.error('安全上下文错误:', e);
-        }
-    });
 
     // 切换侧栏展开/折叠 - 直接显示/隐藏，无动画
     function toggleSidebar(expand) {
@@ -408,30 +350,6 @@ function setupEventListeners() {
     // 文件操作
     document.getElementById('save-btn').addEventListener('click', saveFile);
     document.getElementById('new-btn').addEventListener('click', newFile);
-    document.getElementById('export-project-btn').addEventListener('click', exportProject);
-    document.getElementById('import-project-btn').addEventListener('click', async () => {
-        // 添加通信验证
-        if (!window.electronAPI) {
-            console.error('Electron API未初始化');
-            return;
-        }
-        const projectPath = await window.electronAPI.invoke('import-project');
-        if (projectPath) {
-            window.electronAPI.invoke('request-project-path');
-            // 加载文件树时添加错误处理
-            try {
-                document.getElementById('sidebar-frame').src = `code/files.html?path=${encodeURIComponent(projectPath)}`;
-            } catch (error) {
-                console.error('加载文件树失败:', error);
-            }
-        }
-    });
-
-    document.getElementById('export-project-btn').addEventListener('click', () => {
-        const projectName = document.getElementById('project-name').value;
-        window.electronAPI.exportProject(projectName);
-    });
-
     document.getElementById('export-xml-btn').addEventListener('click', exportWorkspace);
     document.getElementById('import-xml-btn').addEventListener('click', importWorkspace);
     document.getElementById('project-name').addEventListener('change', (e) => {
@@ -508,3 +426,189 @@ document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
     updatePythonCode();
 });
+
+// 初始化WebSocket客户端
+const socket = new WebSocket('ws://localhost:8080');
+socket.binaryType = 'arraybuffer'; // 使用二进制传输格式
+
+// 添加编码处理器
+const encoder = new TextEncoder('utf-8');
+const decoder = new TextDecoder('utf-8');
+const term = document.getElementById('terminal');
+
+// 创建简易终端模拟器
+const createTerminal = () => {
+  term.innerHTML = ''; // 清空内容
+  term.style.fontFamily = 'Consolas, monospace';
+  term.style.color = appState.isNightMode ? '#e0e0e0' : '#1e1e1e';
+  term.style.backgroundColor = appState.isNightMode ? '#252526' : '#ffffff';
+  term.style.padding = '10px';
+  term.style.whiteSpace = 'pre-wrap';
+  term.style.overflow = 'auto';
+};
+
+// WebSocket事件处理
+socket.onopen = () => {
+  createTerminal();
+  term.innerHTML += '$ ';
+  inputElement.focus();
+};
+
+// 新增输入框处理
+const inputHandler = (e) => {
+  if (e.key === 'Enter') {
+    ws.send('\r\n');
+    term.innerHTML += '\r\n$ ';
+  } else if (e.key === 'Backspace') {
+    term.innerHTML = term.innerHTML.replace(/.[\u2588]$/, '');
+  } else if (/^[\x20-\x7F]$/.test(e.key)) {
+    term.innerHTML += e.key.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    ws.send(e.key);
+  }
+  term.scrollTop = term.scrollHeight;
+};
+
+// term.addEventListener('keydown', inputHandler);
+// term.setAttribute('tabindex', '0');
+// term.focus();
+// };
+
+// 接收服务端输出
+// 获取系统类型
+const isWindows = navigator.platform.toLowerCase().includes('win');
+let promptSymbol = isWindows ? '>' : '$';
+
+// 错误处理
+socket.onerror = (error) => {
+  const errorMsg = document.createElement('div');
+  errorMsg.style.color = '#ff4444';
+  errorMsg.textContent = `连接失败: ${error.message || '请检查服务器是否运行'}`;
+  terminal.appendChild(errorMsg);
+};
+
+socket.onclose = (event) => {
+  if (event.wasClean) {
+    console.log(`连接关闭，状态码=${event.code}`);
+  } else {
+    console.error('连接意外中断');
+  }
+};
+
+// 在终端容器中添加可编辑的pre元素
+const terminal = document.getElementById('terminal');
+const inputElement = document.createElement('pre');
+inputElement.contentEditable = true;
+inputElement.style.cssText = 'outline: none; white-space: pre-wrap;';
+terminal.appendChild(inputElement);
+
+// 处理中文输入
+let compositionLock = false;
+inputElement.addEventListener('compositionstart', () => compositionLock = true);
+inputElement.addEventListener('compositionend', () => compositionLock = false);
+
+// 输入事件监听
+inputElement.addEventListener('keydown', (e) => {
+  if (compositionLock) return;
+  
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const command = inputElement.textContent;
+    window.electronAPI.sendCommand(command); // 使用预加载脚本暴露的API
+    inputElement.textContent = '';
+  }
+});
+
+// 接收服务端输出
+ipcRenderer.on('terminal-output', (event, output) => {
+  const outputSpan = document.createElement('span');
+  outputSpan.style.whiteSpace = 'pre-wrap';
+  outputSpan.textContent = output;
+  terminal.insertBefore(outputSpan, inputElement);
+  terminal.scrollTop = terminal.scrollHeight;
+});
+
+function setupTerminal() {
+    const terminal = document.getElementById('terminal');
+    terminal.innerHTML = '> ';
+    terminal.contentEditable = true;
+
+    terminal.addEventListener('keydown', (e) => {
+        if (compositionLock) return;
+        
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const command = terminal.textContent.slice(1).trim();
+            handleTerminalInput(command);
+            terminal.innerHTML = '> ';
+        }
+        // 保持原有历史导航逻辑
+    });
+}
+
+// 修改IPC通信处理
+ipcRenderer.on('terminal-output', (event, output) => {
+    const outputSpan = document.createElement('div');
+    outputSpan.style.whiteSpace = 'pre-wrap';
+    outputSpan.textContent = output;
+    terminal.insertBefore(outputSpan, inputElement);
+    terminal.scrollTop = terminal.scrollHeight;
+});
+
+function handleTerminalInput(command) {
+  command = command.trim();
+  if (!command) return;
+
+  // 执行命令逻辑
+  try {
+    const result = executeCommand(command);
+    displayTerminalOutput(`> ${command}\n${result}`);
+    appState.commandHistory.push(command);
+    appState.historyIndex = appState.commandHistory.length;
+  } catch (error) {
+    displayTerminalOutput(`> ${command}\nError: ${error.message}`);
+  }
+}
+
+function executeCommand(command) {
+  // 添加实际命令处理逻辑
+  if (command === 'clear') {
+    document.getElementById('terminal').innerHTML = '> ';
+    return '';
+  }
+  return `Executed: ${command}`;
+}
+
+function displayTerminalOutput(text) {
+  const terminal = document.getElementById('terminal');
+  const div = document.createElement('div');
+  div.textContent = text;
+  terminal.appendChild(div);
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+function navigateHistory(direction) {
+  const history = appState.commandHistory;
+  if (history.length === 0) return;
+
+  // 边界检查
+  appState.historyIndex = Math.max(0, Math.min(appState.historyIndex + direction, history.length));
+
+  const terminal = document.getElementById('terminal');
+  const currentText = terminal.textContent;
+  
+  // 获取当前历史命令（处理超出索引的情况）
+  const command = appState.historyIndex < history.length 
+    ? history[appState.historyIndex]
+    : '';
+
+  // 保留提示符并更新命令
+  terminal.textContent = `> ${command}`;
+  
+  // 光标定位到末尾
+  const range = document.createRange();
+  const sel = window.getSelection();
+  range.selectNodeContents(terminal);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
